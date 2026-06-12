@@ -62,6 +62,7 @@ export interface LifeProgressInfo {
   yearsRemaining: number;
   monthsRemaining: number;
   weeksRemaining: number;
+  daysRemaining: number;
 
   /**
    * 0..1 progress through expected lifespan
@@ -77,7 +78,13 @@ export interface LifeProgressInfo {
    * 0..1 remaining ratio (1 - completionRatio)
    */
   remainingRatio: number;
+
+  /**
+   * 0..100 remaining percent
+   */
+  remainingPercent: number;
 }
+
 
 /**
  * Calculates calendar-exact age difference between birthDate and now.
@@ -357,7 +364,9 @@ export function getChineseZodiac(year: number): ChineseZodiacInfo {
  */
 export function calculateMilestones(birthDate: Date, now: Date): Milestone[] {
   const dayMilestones = [1000, 5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000];
-  const yearMilestones = [10, 18, 20, 21, 30, 40, 50, 60, 70, 80, 90, 100];
+  // Phase 3: ensure age milestone includes 25
+  const yearMilestones = [10, 18, 20, 21, 25, 30, 40, 50, 60, 70, 80, 90, 100];
+
 
   const milestones: Milestone[] = [];
 
@@ -592,19 +601,20 @@ export function calculateLifeProgress(
     totalLifespanMs <= 0 ? 1 : Math.min(1, Math.max(0, completedMs / totalLifespanMs));
   const completionPercent = Math.round(completionRatio * 100);
   const remainingRatio = 1 - completionRatio;
+  const remainingPercent = Math.round(remainingRatio * 100);
 
   // Remaining breakdown until expectancyDate
   let yearsRemaining = 0;
   let monthsRemaining = 0;
   let weeksRemaining = 0;
+  let daysRemaining = 0;
 
   if (now.getTime() < expectancyDate.getTime()) {
     const remainingAge = calculateExactAge(now, expectancyDate);
     yearsRemaining = remainingAge.years;
     monthsRemaining = remainingAge.months;
-
-    const remainingDaysFloat = remainingAge.days;
-    weeksRemaining = Math.floor(remainingDaysFloat / 7);
+    daysRemaining = remainingAge.days;
+    weeksRemaining = Math.floor(daysRemaining / 7);
   }
 
   return {
@@ -613,11 +623,14 @@ export function calculateLifeProgress(
     yearsRemaining,
     monthsRemaining,
     weeksRemaining,
+    daysRemaining,
     completionRatio,
     completionPercent,
     remainingRatio,
+    remainingPercent,
   };
 }
+
 
 /**
  * Calculates cosmic and biological stats.

@@ -707,19 +707,55 @@ import {
                   </div>
                 </div>
 
-                <div class="pt-3 border-t border-hairline">
-                  <div class="flex items-center justify-between mb-1">
+                <div class="grid grid-cols-1 gap-3 mt-3">
+                  <div class="flex items-center justify-between gap-3">
                     <span
                       class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
-                      >Completion</span
+                      >Days</span
                     >
                     <span
-                      id="life-completion-percent"
+                      id="life-days-remaining"
                       class="text-xs text-link font-mono font-semibold tabular-nums"
-                      >0%</span
+                      >0</span
                     >
                   </div>
                   <div class="flex items-center justify-between">
+                    <span
+                      class="text-[10px] text-mute font-mono uppercase tracking-wider"
+                      >Remaining</span
+                    >
+                    <span
+                      id="life-remaining-percent"
+                      class="text-[10px] text-mute font-mono tabular-nums"
+                      >0%</span
+                    >
+                  </div>
+
+                  <div class="pt-2">
+                    <div class="flex items-center justify-between mb-1">
+                      <span
+                        class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
+                        >Progress</span
+                      >
+                      <span
+                        id="life-completion-percent"
+                        class="text-xs text-link font-mono font-semibold tabular-nums"
+                        >0%</span
+                      >
+                    </div>
+                    <div
+                      class="w-full h-2 bg-canvas-soft border border-hairline rounded-sm overflow-hidden"
+                    >
+                      <div
+                        id="life-completion-bar"
+                        class="h-full bg-link rounded-sm"
+                        style="width:0%"
+                      >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between mt-2">
                     <span
                       class="text-[10px] text-mute font-mono uppercase tracking-wider"
                       >Target Date</span
@@ -1463,9 +1499,16 @@ import {
   const lifeYearsRemaining = document.getElementById("life-years-remaining")!;
   const lifeMonthsRemaining = document.getElementById("life-months-remaining")!;
   const lifeWeeksRemaining = document.getElementById("life-weeks-remaining")!;
+  const lifeDaysRemaining = document.getElementById("life-days-remaining")!;
   const lifeCompletionPercent = document.getElementById(
     "life-completion-percent",
   )!;
+  const lifeRemainingPercent = document.getElementById(
+    "life-remaining-percent",
+  )!;
+  const lifeCompletionRatioBar = document.getElementById(
+    "life-completion-bar",
+  )! as HTMLDivElement;
   const lifeExpectancyDate = document.getElementById("life-expectancy-date")!;
 
   // Milestones timeline
@@ -1739,7 +1782,14 @@ import {
     lifeYearsRemaining.textContent = life.yearsRemaining.toString();
     lifeMonthsRemaining.textContent = life.monthsRemaining.toString();
     lifeWeeksRemaining.textContent = life.weeksRemaining.toString();
-    lifeCompletionPercent.textContent = `${life.completionPercent}%`;
+    // Phase 3 enhancements
+    lifeDaysRemaining.textContent = life.daysRemaining.toString();
+    const completed = Math.max(0, Math.min(100, life.completionPercent));
+    lifeCompletionPercent.textContent = `${completed}%`;
+    lifeRemainingPercent.textContent = `${Math.max(0, 100 - completed)}%`;
+    if (lifeCompletionRatioBar) {
+      lifeCompletionRatioBar.style.width = `${completed}%`;
+    }
     lifeExpectancyDate.textContent = life.expectancyDate.toLocaleDateString(
       "en-US",
       { year: "numeric", month: "short", day: "numeric" },
