@@ -55,6 +55,30 @@ export interface InteractiveStats {
   solarTravelKm: number;
 }
 
+export interface LifeProgressInfo {
+  expectancyYears: number;
+  expectancyDate: Date;
+
+  yearsRemaining: number;
+  monthsRemaining: number;
+  weeksRemaining: number;
+
+  /**
+   * 0..1 progress through expected lifespan
+   */
+  completionRatio: number;
+
+  /**
+   * 0..100 progress through expected lifespan
+   */
+  completionPercent: number;
+
+  /**
+   * 0..1 remaining ratio (1 - completionRatio)
+   */
+  remainingRatio: number;
+}
+
 /**
  * Calculates calendar-exact age difference between birthDate and now.
  */
@@ -109,7 +133,7 @@ export function calculateNextBirthday(birthDate: Date, now: Date): NextBirthdayI
     birthDate.getDate(),
     birthDate.getHours(),
     birthDate.getMinutes(),
-    birthDate.getSeconds()
+    birthDate.getSeconds(),
   );
 
   // If birthday already happened or is happening right now, move to next year
@@ -121,48 +145,114 @@ export function calculateNextBirthday(birthDate: Date, now: Date): NextBirthdayI
       birthDate.getDate(),
       birthDate.getHours(),
       birthDate.getMinutes(),
-      birthDate.getSeconds()
+      birthDate.getSeconds(),
     );
   }
 
   const diffMs = nextBDay.getTime() - now.getTime();
-  const totalDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  let months = nextBDay.getMonth() - now.getMonth();
-  let days = nextBDay.getDate() - now.getDate();
-  let hours = nextBDay.getHours() - now.getHours();
-  let minutes = nextBDay.getMinutes() - now.getMinutes();
-  let seconds = nextBDay.getSeconds() - now.getSeconds();
+  // Breakdown calculation: advance a cursor from `now` towards `nextBDay`
+  // to keep the result consistent with the actual computed `nextBirthdayDate`.
+  // Note: month increments must clamp the day to the last valid day of the target month.
+  const cursorStart = new Date(now.getTime());
+  const cursor = new Date(cursorStart.getTime());
 
-  if (seconds < 0) {
-    seconds += 60;
-    minutes--;
+  const clampDayToMonth = (year: number, monthIndex: number, day: number) => {
+    // monthIndex: 0-11
+    const lastDay = new Date(year, monthIndex + 1, 0).getDate();
+    return Math.min(day, lastDay);
+  };
+
+  const addOneMonthClamped = (d: Date) => {
+    const year = d.getFullYear();
+    const monthIndex = d.getMonth(); // 0-11
+    const nextMonthIndex = monthIndex + 1; // JS Date handles year rollover
+
+    const clampedDay = clampDayToMonth(
+      year,
+      nextMonthIndex,
+      d.getDate(),
+    );
+
+    return new Date(
+      year,
+      nextMonthIndex,
+      clampedDay,
+      d.getHours(),
+      d.getMinutes(),
+      d.getSeconds(),
+    );
+  };
+
+  // Months (full month steps that do not pass nextBDay)
+  let months = 0;
+  while (true) {
+    const candidate = addOneMonthClamped(cursor);
+    if (candidate.getTime() <= nextBDay.getTime()) {
+      cursor.setTime(candidate.getTime());
+      months++;
+      continue;
+    }
+    break;
   }
-  if (minutes < 0) {
-    minutes += 60;
-    hours--;
+
+  // Days (full 24h steps that do not pass nextBDay)
+  let days = 0;
+  while (true) {
+    const candidate = new Date(cursor.getTime() + 24 * 60 * 60 * 1000);
+    if (candidate.getTime() <= nextBDay.getTime()) {
+      cursor.setTime(candidate.getTime());
+      days++;
+      continue;
+    }
+    break;
   }
-  if (hours < 0) {
-    hours += 24;
-    days--;
+
+  // Hours (full 60m steps)
+  let hours = 0;
+  while (true) {
+    const candidate = new Date(cursor.getTime() + 60 * 60 * 1000);
+    if (candidate.getTime() <= nextBDay.getTime()) {
+      cursor.setTime(candidate.getTime());
+      hours++;
+      continue;
+    }
+    break;
   }
-  if (days < 0) {
-    const prevMonth = new Date(nextBDay.getFullYear(), nextBDay.getMonth(), 0);
-    days += prevMonth.getDate();
-    months--;
+
+  // Minutes (full 60s steps)
+  let minutes = 0;
+  while (true) {
+    const candidate = new Date(cursor.getTime() + 60 * 1000);
+    if (candidate.getTime() <= nextBDay.getTime()) {
+      cursor.setTime(candidate.getTime());
+      minutes++;
+      continue;
+    }
+    break;
   }
-  if (months < 0) {
-    months += 12;
+
+  // Seconds
+  let seconds = 0;
+  while (true) {
+    const candidate = new Date(cursor.getTime() + 1000);
+    if (candidate.getTime() <= nextBDay.getTime()) {
+      cursor.setTime(candidate.getTime());
+      seconds++;
+      continue;
+    }
+    break;
   }
 
   return {
     nextBirthdayDate: nextBDay,
-    daysRemaining: totalDays,
+    daysRemaining,
     months,
     days,
     hours,
     minutes,
-    seconds
+    seconds,
   };
 }
 
@@ -171,7 +261,7 @@ export function calculateNextBirthday(birthDate: Date, now: Date): NextBirthdayI
  */
 export function calculateTotalUnits(birthDate: Date, now: Date): TotalUnits {
   const diffMs = Math.max(0, now.getTime() - birthDate.getTime());
-  
+
   const seconds = Math.floor(diffMs / 1000);
   const minutes = Math.floor(diffMs / (1000 * 60));
   const hours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -318,6 +408,220 @@ export function calculateMilestones(birthDate: Date, now: Date): Milestone[] {
 /**
  * Calculates cosmic and biological stats.
  */
+export interface PlanetaryAgeInfo {
+  mercury: number;
+  venus: number;
+  mars: number;
+  jupiter: number;
+  saturn: number;
+}
+
+export interface LifeStatisticsInfo {
+  weekendsLived: number;
+  leapYearsWitnessed: number;
+
+  olympicsSeen: number;
+  worldCupsSeen: number;
+
+  moonCyclesCompleted: number;
+  earthOrbitsCompleted: number;
+}
+
+export function calculatePlanetaryAges(
+  birthDate: Date,
+  now: Date,
+): PlanetaryAgeInfo {
+  const diffMs = Math.max(0, now.getTime() - birthDate.getTime());
+  const earthYears = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+
+  // Orbital periods relative to Earth years
+  // Source: commonly used approximate orbital periods in astronomy.
+  const mercuryYears = 0.2408467;
+  const venusYears = 0.61519726;
+  const marsYears = 1.8808158;
+  const jupiterYears = 11.862615;
+  const saturnYears = 29.447498;
+
+  return {
+    mercury: earthYears / mercuryYears,
+    venus: earthYears / venusYears,
+    mars: earthYears / marsYears,
+    jupiter: earthYears / jupiterYears,
+    saturn: earthYears / saturnYears,
+  };
+}
+
+export function calculateLifeStatistics(
+  birthDate: Date,
+  now: Date,
+): LifeStatisticsInfo {
+  const birthMs = birthDate.getTime();
+  const nowMs = now.getTime();
+
+  // If input is inverted, return zeros (no time lived yet).
+  if (nowMs <= birthMs) {
+    return {
+      weekendsLived: 0,
+      leapYearsWitnessed: 0,
+      olympicsSeen: 0,
+      worldCupsSeen: 0,
+      moonCyclesCompleted: 0,
+      earthOrbitsCompleted: 0,
+    };
+  }
+
+  const dayMs = 1000 * 60 * 60 * 24;
+  const totalDaysLived = Math.floor((nowMs - birthMs) / dayMs);
+
+  // --- Weekends lived (Sat/Sun) ---
+  // Count day boundaries from birth date day to now day, local-time based.
+  let weekendsLived = 0;
+  const cursor = new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  for (let i = 0; i <= totalDaysLived; i++) {
+    const dow = cursor.getDay(); // 0=Sun, 6=Sat
+    if (dow === 0 || dow === 6) weekendsLived++;
+
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  // --- Leap years witnessed ---
+  // Count leap years that have at least one moment overlapping (birth..now).
+  const leapYearsWitnessed = (() => {
+    const startY = birthDate.getFullYear();
+    const endY = now.getFullYear();
+    let count = 0;
+
+    for (let y = startY; y <= endY; y++) {
+      const isLeap =
+        (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+
+      if (!isLeap) continue;
+
+      // Leap day window: Feb 29 at start of day to end of day
+      const leapStart = new Date(y, 1, 29, 0, 0, 0).getTime(); // monthIndex 1 = Feb
+      const leapEnd = new Date(y, 1, 29, 23, 59, 59, 999).getTime();
+
+      // Overlap if [birth..now] intersects [leapDay..leapDayEnd]
+      if (birthMs <= leapEnd && nowMs >= leapStart) count++;
+    }
+
+    return count;
+  })();
+
+  // --- Olympics seen (Summer Olympics, approx every 4 years) ---
+  // Starting 1896 (common convention). This is approximate.
+  const olympicsSeen = (() => {
+    const startYear = 1896;
+    const bY = birthDate.getFullYear();
+    const nY = now.getFullYear();
+
+    let count = 0;
+    for (let y = startYear; y <= nY; y += 4) {
+      if (y < bY) continue;
+      // Use year overlap approximation: if the event year is within the lifetime span
+      // (This intentionally stays simple and local/offline.)
+      if (y >= bY) count++;
+    }
+    return count;
+  })();
+
+  // --- World Cups seen (FIFA Men's World Cup, approx every 4 years from 1930) ---
+  // Approximate and ignores real schedule irregularities/cancellations.
+  const worldCupsSeen = (() => {
+    const startYear = 1930;
+    const bY = birthDate.getFullYear();
+    const nY = now.getFullYear();
+
+    let count = 0;
+    for (let y = startYear; y <= nY; y += 4) {
+      if (y < bY) continue;
+      if (y >= bY) count++;
+    }
+    return count;
+  })();
+
+  // --- Moon cycles completed (synodic month) ---
+  const synodicMonthDays = 29.530588; // average
+  const moonCyclesCompleted = Math.floor(
+    totalDaysLived / synodicMonthDays,
+  );
+
+  // --- Earth orbits completed (tropical year) ---
+  const earthOrbitDays = 365.25636;
+  const earthOrbitsCompleted = Math.floor(
+    totalDaysLived / earthOrbitDays,
+  );
+
+  return {
+    weekendsLived,
+    leapYearsWitnessed,
+    olympicsSeen,
+    worldCupsSeen,
+    moonCyclesCompleted,
+    earthOrbitsCompleted,
+  };
+}
+
+/**
+ * Life Progress Dashboard.
+ */
+export function calculateLifeProgress(
+  birthDate: Date,
+  now: Date,
+  expectancyYears: number,
+): LifeProgressInfo {
+  const expectancyYearsClamped = Math.max(0, Math.floor(expectancyYears));
+
+  // Expectancy date keeps the same month/day/time as the birthdate.
+  // If day doesn't exist in target year (e.g., Feb 29), JS Date will roll;
+  // acceptable for a "premium" UI as long as we stay consistent.
+  const expectancyDate = new Date(
+    birthDate.getFullYear() + expectancyYearsClamped,
+    birthDate.getMonth(),
+    birthDate.getDate(),
+    birthDate.getHours(),
+    birthDate.getMinutes(),
+    birthDate.getSeconds(),
+  );
+
+  const totalLifespanMs =
+    expectancyDate.getTime() - birthDate.getTime();
+  const completedMs = now.getTime() - birthDate.getTime();
+
+  const completionRatio =
+    totalLifespanMs <= 0 ? 1 : Math.min(1, Math.max(0, completedMs / totalLifespanMs));
+  const completionPercent = Math.round(completionRatio * 100);
+  const remainingRatio = 1 - completionRatio;
+
+  // Remaining breakdown until expectancyDate
+  let yearsRemaining = 0;
+  let monthsRemaining = 0;
+  let weeksRemaining = 0;
+
+  if (now.getTime() < expectancyDate.getTime()) {
+    const remainingAge = calculateExactAge(now, expectancyDate);
+    yearsRemaining = remainingAge.years;
+    monthsRemaining = remainingAge.months;
+
+    const remainingDaysFloat = remainingAge.days;
+    weeksRemaining = Math.floor(remainingDaysFloat / 7);
+  }
+
+  return {
+    expectancyYears: expectancyYearsClamped,
+    expectancyDate,
+    yearsRemaining,
+    monthsRemaining,
+    weeksRemaining,
+    completionRatio,
+    completionPercent,
+    remainingRatio,
+  };
+}
+
+/**
+ * Calculates cosmic and biological stats.
+ */
 export function calculateStats(birthDate: Date, now: Date): InteractiveStats {
   const diffMs = Math.max(0, now.getTime() - birthDate.getTime());
   const minutes = diffMs / (1000 * 60);
@@ -337,6 +641,6 @@ export function calculateStats(birthDate: Date, now: Date): InteractiveStats {
     heartbeats,
     breaths,
     moonOrbits,
-    solarTravelKm
+    solarTravelKm,
   };
 }

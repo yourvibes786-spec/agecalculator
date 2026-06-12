@@ -7,6 +7,8 @@ import {
   getChineseZodiac,
   calculateMilestones,
   calculateStats,
+  calculateLifeProgress,
+  calculatePlanetaryAges,
 } from "../utils/age";
 ---
 
@@ -41,6 +43,16 @@ import {
         type="button"
       >
         Reset Form
+      </button>
+
+      <!-- Dark Mode Toggle -->
+      <button
+        type="button"
+        id="theme-toggle"
+        aria-label="Toggle dark mode"
+        class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+      >
+        Dark Mode
       </button>
     </div>
   </header>
@@ -294,6 +306,7 @@ import {
           >
             <span
               id="age-years"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
               >0</span
             >
@@ -308,6 +321,7 @@ import {
           >
             <span
               id="age-months"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
               >0</span
             >
@@ -322,6 +336,7 @@ import {
           >
             <span
               id="age-days"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
               >0</span
             >
@@ -336,6 +351,7 @@ import {
           >
             <span
               id="age-hours"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
               >0</span
             >
@@ -350,6 +366,7 @@ import {
           >
             <span
               id="age-minutes"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
               >0</span
             >
@@ -364,6 +381,7 @@ import {
           >
             <span
               id="age-seconds"
+              aria-live="polite"
               class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-link tabular-nums"
               >0</span
             >
@@ -488,6 +506,7 @@ import {
                   >
                     <span
                       id="countdown-days"
+                      aria-live="polite"
                       class="text-3xl font-bold tracking-tight text-ink tabular-nums"
                       >0</span
                     >
@@ -502,11 +521,16 @@ import {
 
             <!-- Summary Countdown timer details -->
             <div class="mt-4 pt-4 border-t border-hairline text-center">
-              <p id="countdown-text" class="text-xs text-body font-mono mb-2">
+              <p
+                id="countdown-text"
+                aria-live="polite"
+                class="text-xs text-body font-mono mb-2"
+              >
                 0 months & 0 days remaining
               </p>
               <div
                 id="countdown-clock"
+                aria-live="polite"
                 class="text-xs font-mono font-semibold text-primary select-text bg-canvas-soft-2 rounded-sm py-1.5 px-2 tabular-nums"
               >
                 00:00:00:00
@@ -606,6 +630,108 @@ import {
               class="mt-4 p-3 bg-canvas-soft border border-hairline rounded-sm font-mono text-[10px] text-mute uppercase tracking-wider leading-relaxed"
             >
               Traits description
+            </div>
+
+            <!-- Life Progress Dashboard (V2) -->
+            <div
+              class="mt-6 bg-canvas-soft border border-hairline rounded-lg p-4 shadow-level-1"
+            >
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <h4
+                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+                >
+                  Life Progress
+                </h4>
+                <span
+                  class="font-mono text-[10px] text-mute uppercase tracking-widest"
+                >
+                  Premium
+                </span>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-3">
+                  <label
+                    for="life-expectancy-years"
+                    class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
+                  >
+                    Life Expectancy (Years)
+                  </label>
+                  <input
+                    type="number"
+                    id="life-expectancy-years"
+                    min="1"
+                    max="130"
+                    step="1"
+                    inputmode="numeric"
+                    class="w-20 h-9 px-3 bg-canvas text-ink border border-hairline focus-ring rounded-sm text-sm font-mono"
+                  />
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                  <div class="text-center">
+                    <span
+                      id="life-years-remaining"
+                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                      >0</span
+                    >
+                    <div
+                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
+                    >
+                      Years
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <span
+                      id="life-months-remaining"
+                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                      >0</span
+                    >
+                    <div
+                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
+                    >
+                      Months
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <span
+                      id="life-weeks-remaining"
+                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                      >0</span
+                    >
+                    <div
+                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
+                    >
+                      Weeks
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-hairline">
+                  <div class="flex items-center justify-between mb-1">
+                    <span
+                      class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
+                      >Completion</span
+                    >
+                    <span
+                      id="life-completion-percent"
+                      class="text-xs text-link font-mono font-semibold tabular-nums"
+                      >0%</span
+                    >
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="text-[10px] text-mute font-mono uppercase tracking-wider"
+                      >Target Date</span
+                    >
+                    <span
+                      id="life-expectancy-date"
+                      class="text-[10px] text-mute font-mono tabular-nums"
+                      >—</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -724,6 +850,27 @@ import {
                   ></path>
                 </svg>
                 Download Share Card
+              </button>
+
+              <button
+                type="button"
+                id="share-web-btn"
+                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-8l-4-4-4 4m4-4v12"
+                  ></path>
+                </svg>
+                Share Life Summary
               </button>
             </div>
           </div>
@@ -1038,6 +1185,171 @@ import {
               </p>
             </div>
           </div>
+
+          <!-- Planetary Age Explorer (V2) -->
+          <div
+            class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <h4
+                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+              >
+                Planetary Age Explorer
+              </h4>
+              <span
+                class="font-mono text-[10px] text-mute uppercase tracking-widest"
+                >Approx.</span
+              >
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+              <div class="text-center">
+                <span class="text-[11px] text-body font-mono font-semibold"
+                  >Mercury</span
+                >
+                <div
+                  id="planetary-mercury"
+                  class="text-2xl font-bold text-ink tabular-nums"
+                >
+                  0
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] text-body font-mono font-semibold"
+                  >Venus</span
+                >
+                <div
+                  id="planetary-venus"
+                  class="text-2xl font-bold text-ink tabular-nums"
+                >
+                  0
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] text-body font-mono font-semibold"
+                  >Mars</span
+                >
+                <div
+                  id="planetary-mars"
+                  class="text-2xl font-bold text-ink tabular-nums"
+                >
+                  0
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] text-body font-mono font-semibold"
+                  >Jupiter</span
+                >
+                <div
+                  id="planetary-jupiter"
+                  class="text-2xl font-bold text-ink tabular-nums"
+                >
+                  0
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] text-body font-mono font-semibold"
+                  >Saturn</span
+                >
+                <div
+                  id="planetary-saturn"
+                  class="text-2xl font-bold text-ink tabular-nums"
+                >
+                  0
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-body leading-relaxed mt-3 select-text">
+              Planetary years computed from your Earth elapsed years divided by
+              each planet’s orbital period.
+            </p>
+          </div>
+
+          <!-- Life Statistics Dashboard (V2) -->
+          <div
+            class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <h4
+                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+              >
+                Life Statistics Intelligence
+              </h4>
+              <span
+                class="font-mono text-[10px] text-mute uppercase tracking-widest"
+                >Est.</span
+              >
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-weekends-lived"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  Weekends lived (Sat/Sun)
+                </p>
+              </div>
+
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-leap-years-witnessed"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  Leap years witnessed
+                </p>
+              </div>
+
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-olympics-seen"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  Olympics seen
+                </p>
+              </div>
+
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-world-cups-seen"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  FIFA World Cups seen
+                </p>
+              </div>
+
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-moon-cycles-completed"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  Moon cycles completed
+                </p>
+              </div>
+
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
+                <span
+                  id="stat-earth-orbits-completed"
+                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
+                  >0</span
+                >
+                <p class="text-xs text-body leading-relaxed mt-1 select-text">
+                  Earth orbits completed
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1082,6 +1394,9 @@ import {
     getChineseZodiac,
     calculateMilestones,
     calculateStats,
+    calculateLifeProgress,
+    calculatePlanetaryAges,
+    calculateLifeStatistics,
   } from "../utils/age";
 
   // Global variables to store the active birthdate
@@ -1141,6 +1456,18 @@ import {
   const countdownText = document.getElementById("countdown-text")!;
   const countdownClock = document.getElementById("countdown-clock")!;
 
+  // Life Progress (V2)
+  const lifeExpectancyYearsInput = document.getElementById(
+    "life-expectancy-years",
+  ) as HTMLInputElement;
+  const lifeYearsRemaining = document.getElementById("life-years-remaining")!;
+  const lifeMonthsRemaining = document.getElementById("life-months-remaining")!;
+  const lifeWeeksRemaining = document.getElementById("life-weeks-remaining")!;
+  const lifeCompletionPercent = document.getElementById(
+    "life-completion-percent",
+  )!;
+  const lifeExpectancyDate = document.getElementById("life-expectancy-date")!;
+
   // Milestones timeline
   const milestonesTimeline = document.getElementById("milestones-timeline")!;
 
@@ -1150,10 +1477,32 @@ import {
   const statMoonOrbits = document.getElementById("stat-moon-orbits")!;
   const statSolarTravel = document.getElementById("stat-solar-travel")!;
 
+  // Life Statistics Intelligence (V2)
+  const statWeekendsLived = document.getElementById("stat-weekends-lived")!;
+  const statLeapYearsWitnessed = document.getElementById(
+    "stat-leap-years-witnessed",
+  )!;
+  const statOlympicsSeen = document.getElementById("stat-olympics-seen")!;
+  const statWorldCupsSeen = document.getElementById("stat-world-cups-seen")!;
+  const statMoonCyclesCompleted = document.getElementById(
+    "stat-moon-cycles-completed",
+  )!;
+  const statEarthOrbitsCompleted = document.getElementById(
+    "stat-earth-orbits-completed",
+  )!;
+
+  // Planetary Age Explorer (V2)
+  const planetaryMercury = document.getElementById("planetary-mercury")!;
+  const planetaryVenus = document.getElementById("planetary-venus")!;
+  const planetaryMars = document.getElementById("planetary-mars")!;
+  const planetaryJupiter = document.getElementById("planetary-jupiter")!;
+  const planetarySaturn = document.getElementById("planetary-saturn")!;
+
   // Action Elements
   const copySummaryBtn = document.getElementById("copy-summary-btn")!;
   const copyBtnText = document.getElementById("copy-btn-text")!;
   const downloadCardBtn = document.getElementById("download-card-btn")!;
+  const shareWebBtn = document.getElementById("share-web-btn")!;
 
   // Share Card Static DOM elements
   const shareCardDate = document.getElementById("share-card-date")!;
@@ -1163,12 +1512,61 @@ import {
 
   // 1. Initial State / LocalStorage loading
   window.addEventListener("DOMContentLoaded", () => {
+    // Theme (Dark Mode) persistence
+    const savedTheme = localStorage.getItem("theme");
+    const theme =
+      savedTheme === "dark" || savedTheme === "light" ? savedTheme : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+
+    const themeToggle = document.getElementById("theme-toggle");
+    if (themeToggle) {
+      themeToggle.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+      themeToggle.addEventListener("click", () => {
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        themeToggle.textContent = next === "dark" ? "Light Mode" : "Dark Mode";
+
+        // Re-render share card canvas backgrounds for theme coherence
+        if (activeBirthDate) {
+          runCalculations(false);
+        }
+      });
+    }
+
     const savedDate = localStorage.getItem("birth-date");
     const savedTime = localStorage.getItem("birth-time");
 
     // Set default max date to today
     const today = new Date().toISOString().split("T")[0];
     birthDateInput.max = today;
+
+    // Life expectancy preference (V2)
+    const savedExpectancy = localStorage.getItem("life-expectancy-years");
+    const defaultExpectancy = 85;
+    const parsedExpectancy = savedExpectancy
+      ? Math.min(130, Math.max(1, parseInt(savedExpectancy, 10)))
+      : defaultExpectancy;
+    lifeExpectancyYearsInput.value = parsedExpectancy.toString();
+    localStorage.setItem("life-expectancy-years", parsedExpectancy.toString());
+
+    // Persist preference on change
+    lifeExpectancyYearsInput.addEventListener("input", () => {
+      const v = Math.min(
+        130,
+        Math.max(
+          1,
+          parseInt(lifeExpectancyYearsInput.value || "0", 10) ||
+            defaultExpectancy,
+        ),
+      );
+      lifeExpectancyYearsInput.value = v.toString();
+      localStorage.setItem("life-expectancy-years", v.toString());
+
+      // Update dashboard if active
+      if (activeBirthDate) runCalculations(false);
+    });
 
     if (savedDate) {
       birthDateInput.value = savedDate;
@@ -1312,6 +1710,41 @@ import {
     statMoonOrbits.textContent = stats.moonOrbits.toLocaleString();
     statSolarTravel.textContent = stats.solarTravelKm.toLocaleString();
 
+    // Life Statistics Intelligence (V2)
+    const lifeStats = calculateLifeStatistics(activeBirthDate, now);
+    statWeekendsLived.textContent = lifeStats.weekendsLived.toLocaleString();
+    statLeapYearsWitnessed.textContent =
+      lifeStats.leapYearsWitnessed.toLocaleString();
+    statOlympicsSeen.textContent = lifeStats.olympicsSeen.toLocaleString();
+    statWorldCupsSeen.textContent = lifeStats.worldCupsSeen.toLocaleString();
+    statMoonCyclesCompleted.textContent =
+      lifeStats.moonCyclesCompleted.toLocaleString();
+    statEarthOrbitsCompleted.textContent =
+      lifeStats.earthOrbitsCompleted.toLocaleString();
+
+    // Update Planetary Ages (V2)
+    const planetary = calculatePlanetaryAges(activeBirthDate, now);
+    planetaryMercury.textContent = planetary.mercury.toFixed(1);
+    planetaryVenus.textContent = planetary.venus.toFixed(1);
+    planetaryMars.textContent = planetary.mars.toFixed(1);
+    planetaryJupiter.textContent = planetary.jupiter.toFixed(1);
+    planetarySaturn.textContent = planetary.saturn.toFixed(1);
+
+    // Life Progress Dashboard (V2)
+    const expectancyYears = Math.min(
+      130,
+      Math.max(1, parseInt(lifeExpectancyYearsInput.value || "85", 10) || 85),
+    );
+    const life = calculateLifeProgress(activeBirthDate, now, expectancyYears);
+    lifeYearsRemaining.textContent = life.yearsRemaining.toString();
+    lifeMonthsRemaining.textContent = life.monthsRemaining.toString();
+    lifeWeeksRemaining.textContent = life.weeksRemaining.toString();
+    lifeCompletionPercent.textContent = `${life.completionPercent}%`;
+    lifeExpectancyDate.textContent = life.expectancyDate.toLocaleDateString(
+      "en-US",
+      { year: "numeric", month: "short", day: "numeric" },
+    );
+
     // Update Birthday countdown
     countdownDays.textContent = nextBDay.daysRemaining.toString();
 
@@ -1393,7 +1826,7 @@ import {
     const milestones = calculateMilestones(birthDate, now);
     milestonesTimeline.innerHTML = "";
 
-    milestones.forEach((milestone, idx) => {
+    milestones.forEach((milestone: any, idx: number) => {
       const isPast = milestone.isPast;
       const formattedDate = milestone.date.toLocaleDateString("en-US", {
         year: "numeric",
@@ -1512,6 +1945,61 @@ import {
       });
   });
 
+  // 9. Web Share Life Summary (Premium)
+  shareWebBtn.addEventListener("click", async () => {
+    if (!activeBirthDate) return;
+
+    const now = new Date();
+    const age = calculateExactAge(activeBirthDate, now);
+    const nextBDay = calculateNextBirthday(activeBirthDate, now);
+    const units = calculateTotalUnits(activeBirthDate, now);
+    const zodiac = getZodiacSign(activeBirthDate);
+    const chineseZ = getChineseZodiac(activeBirthDate.getFullYear());
+
+    let bdayText = "";
+    if (nextBDay.months > 0 && nextBDay.days > 0) {
+      bdayText = `${nextBDay.months} months and ${nextBDay.days} days`;
+    } else if (nextBDay.months > 0) {
+      bdayText = `${nextBDay.months} months`;
+    } else if (nextBDay.days > 0) {
+      bdayText = `${nextBDay.days} days`;
+    } else {
+      bdayText = "today!";
+    }
+
+    const shareText =
+      `I am exactly ${age.years} years, ${age.months} months, and ${age.days} days old today!\n` +
+      `Total days lived: ${units.days.toLocaleString()} days 🌏\n` +
+      `Next birthday in: ${bdayText}\n` +
+      `Zodiac: ${zodiac.name} ${zodiac.symbol}  |  Chinese Zodiac: ${chineseZ.name} ${chineseZ.symbol}\n` +
+      `Calculate your exact age at: ${window.location.origin}`;
+
+    try {
+      // Prefer native Web Share API
+      if (navigator.share) {
+        await navigator.share({
+          title: "Age Calculator — Life Summary",
+          text: shareText,
+          url: window.location.origin,
+        });
+        copyBtnText.textContent = "Shared!";
+        setTimeout(() => {
+          copyBtnText.textContent = "Copy Summary Text";
+        }, 2000);
+        return;
+      }
+
+      // Fallback: clipboard copy
+      await navigator.clipboard.writeText(shareText);
+      copyBtnText.textContent = "Copied for sharing!";
+      setTimeout(() => {
+        copyBtnText.textContent = "Copy Summary Text";
+      }, 2000);
+    } catch (err) {
+      console.error("Web share failed", err);
+    }
+  });
+
   // 9. Download Share Card (HTML5 Canvas PNG Renderer)
   downloadCardBtn.addEventListener("click", () => {
     if (!activeBirthDate) return;
@@ -1624,7 +2112,8 @@ import {
 
     // Trigger download of canvas image
     const link = document.createElement("a");
-    link.download = `my-exact-age-${age.years}.png`;
+    const birthISO = activeBirthDate.toISOString().slice(0, 10);
+    link.download = `age-calculator-${birthISO}-${age.years}y.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   });
