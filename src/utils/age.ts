@@ -657,3 +657,461 @@ export function calculateStats(birthDate: Date, now: Date): InteractiveStats {
     solarTravelKm,
   };
 }
+
+// ------------------------------
+// Phase 3 — Premium extensions
+// ------------------------------
+
+export type ComparisonKind =
+  | "olderBy"
+  | "youngerBy"
+  | "witnessed"
+  | "leapYearsLived";
+
+export interface AgeComparisonCard {
+  id: string;
+  title: string;
+  subtitle?: string;
+  kind: ComparisonKind;
+  valueText: string;
+}
+
+const clampNonNegativeInt = (n: number) => {
+  if (!Number.isFinite(n)) return 0;
+  return Math.max(0, Math.floor(n));
+};
+
+function safeAddYearsClamped(base: Date, years: number): Date {
+  const y = base.getFullYear() + years;
+  // Keep month/day where possible; JS will roll invalid dates.
+  return new Date(
+    y,
+    base.getMonth(),
+    base.getDate(),
+    base.getHours(),
+    base.getMinutes(),
+    base.getSeconds(),
+  );
+}
+
+function makeReferenceDateFromYear(year: number): Date {
+  // Deterministic: choose a stable reference month/day/time.
+  // We use UTC-ish safe local date by using Date constructor with numbers.
+  // (Still local-time but deterministic across runs.)
+  return new Date(year, 0, 1, 0, 0, 0);
+}
+
+function formatAgeDiffParts(diff: ExactAge): string {
+  // Use only non-zero parts, fall back to days.
+  const parts: string[] = [];
+  if (diff.years) parts.push(`${diff.years} year${diff.years === 1 ? "" : "s"}`);
+  if (diff.months) parts.push(`${diff.months} month${diff.months === 1 ? "" : "s"}`);
+  if (diff.days) parts.push(`${diff.days} day${diff.days === 1 ? "" : "s"}`);
+  if (parts.length === 0) return `${diff.days} days`;
+  return parts.join(", ");
+}
+
+/**
+ * Age Comparison Engine
+ *
+ * References are approximations using known-ish public launch/birth years.
+ * Deterministic local/offline.
+ */
+export function calculateAgeComparisonCards(
+  birthDate: Date,
+  now: Date,
+): AgeComparisonCard[] {
+  // Reference dates (approx):
+  // ChatGPT launch ~ 2022 (system/beta around Nov 2022).
+  // Google: 1998 (Sep 4, 1998 approx).
+  // YouTube: 2005 (Feb 14 2005 approx).
+  // Instagram: 2010 (Oct 2010 approx).
+  // TikTok: 2016 (Sep 2016 approx) — musical.ly merger/brand.
+  // Facebook: 2004 (Feb 2004 approx).
+  // We use Jan 1 of the year for determinism.
+  const refs: Array<{
+    id: string;
+    label: string;
+    year: number;
+  }> = [
+      { id: "chatgpt", label: "ChatGPT", year: 2022 },
+      { id: "google", label: "Google", year: 1998 },
+      { id: "youtube", label: "YouTube", year: 2005 },
+      { id: "instagram", label: "Instagram", year: 2010 },
+      { id: "tiktok", label: "TikTok", year: 2016 },
+      { id: "facebook", label: "Facebook", year: 2004 },
+    ];
+
+  const result: AgeComparisonCard[] = [];
+
+  const myAge = calculateExactAge(birthDate, now);
+
+  for (const r of refs) {
+    const refDate = makeReferenceDateFromYear(r.year);
+    const refAge = calculateExactAge(refDate, now);
+
+    // Compute diff by converting refAge back to a relative date isn't available.
+    // Instead compare on total elapsed days approx.
+    const myDays = calculateTotalUnits(birthDate, now).days;
+    const refDays = calculateTotalUnits(refDate, now).days;
+
+    const diffDays = Math.abs(myDays - refDays);
+    const diffAgeApprox: ExactAge = {
+      years: clampNonNegativeInt(diffDays / 365.25),
+      months: clampNonNegativeInt((diffDays % 365.25) / 30.4375),
+      days: clampNonNegativeInt(diffDays % 30.4375),
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+
+    const youAreOlder = myDays >= refDays;
+
+    result.push({
+      id: `cmp-${r.id}`,
+      title: youAreOlder
+        ? `You are older than ${r.label}`
+        : `You are younger than ${r.label}`,
+      kind: youAreOlder ? "olderBy" : "youngerBy",
+      valueText: `by ${formatAgeDiffParts(diffAgeApprox)}`,
+      subtitle: youAreOlder ? "Living on a longer timeline." : "Still catching up in the calendar.",
+    });
+  }
+
+  // Extra cards requested
+  // Olympic witness / World Cups witness
+  const lifeStats = calculateLifeStatistics(birthDate, now);
+  result.push({
+    id: "cmp-olympics",
+    title: `You have witnessed ${lifeStats.olympicsSeen} Olympic Games`,
+    kind: "witnessed",
+    valueText: "(Approximate, local calculation)",
+  });
+  result.push({
+    id: "cmp-worldcups",
+    title: `You have witnessed ${lifeStats.worldCupsSeen} FIFA World Cups`,
+    kind: "witnessed",
+    valueText: "(Approximate, local calculation)",
+  });
+
+  result.push({
+    id: "cmp-leapyears",
+    title: `You have lived through ${lifeStats.leapYearsWitnessed} leap years`,
+    kind: "leapYearsLived",
+    valueText: "(Counted across your birth→now interval)",
+  });
+
+  return result;
+}
+
+export interface HistoricalContextCard {
+  id: string;
+  title: string;
+  date: Date;
+  description: string;
+}
+
+export function calculateHistoricalContext(
+  birthDate: Date,
+  now: Date,
+): HistoricalContextCard[] {
+  // Timeline events (approx years/dates), deterministic.
+  const events: Array<{
+    id: string;
+    title: string;
+    year: number;
+    description: string;
+  }> = [
+      // Internet milestones
+      {
+        id: "internet-essentials",
+        title: "Internet enters everyday life",
+        year: 1995,
+        description: "Dial-up era accelerates and web browsing goes mainstream.",
+      },
+      {
+        id: "google-launch",
+        title: "Google becomes a search default",
+        year: 1998,
+        description: "Search quality improves and the web gets indexed at scale.",
+      },
+      // Smartphone era
+      {
+        id: "smartphone-era",
+        title: "Smartphone era deepens",
+        year: 2007,
+        description: "Modern smartphones reshape communication and media.",
+      },
+      // Social media launches
+      {
+        id: "facebook-launch",
+        title: "Social networking expands",
+        year: 2004,
+        description: "Platforms turn browsing into social connection.",
+      },
+      {
+        id: "youtube-launch",
+        title: "Video-sharing becomes global",
+        year: 2005,
+        description: "Online video shifts from niche to mainstream.",
+      },
+      {
+        id: "instagram-launch",
+        title: "Photo-first social media rises",
+        year: 2010,
+        description: "Visual sharing becomes a daily habit.",
+      },
+      {
+        id: "whatsapp-launch",
+        title: "Messaging goes mobile",
+        year: 2009,
+        description: "Chat turns into an always-on communication layer.",
+      },
+      {
+        id: "tiktok-launch",
+        title: "Short-form video takes over feeds",
+        year: 2016,
+        description: "Algorithmic discovery boosts creativity at speed.",
+      },
+      // AI milestones
+      {
+        id: "ai-research-catchup",
+        title: "Generative AI era accelerates",
+        year: 2017,
+        description: "Transformers and modern architectures unlock new capabilities.",
+      },
+      {
+        id: "chatgpt-launch",
+        title: "Chatbots become conversational",
+        year: 2022,
+        description: "AI assistants turn demos into tools for everyday users.",
+      },
+      // Technology milestones (iPhone era requested)
+      {
+        id: "iphone-era",
+        title: "The iPhone experience reshapes tech",
+        year: 2007,
+        description: "Touch-first design and app ecosystems spread quickly.",
+      },
+    ];
+
+  // Entity contextual cards requested
+  const entities: Array<{
+    id: string;
+    title: string;
+    year: number;
+    description: string;
+  }> = [
+      {
+        id: "entity-google",
+        title: "Google",
+        year: 1998,
+        description: "Search, ads, and information systems at web scale.",
+      },
+      {
+        id: "entity-youtube",
+        title: "YouTube",
+        year: 2005,
+        description: "Video publishing + discovery communities.",
+      },
+      {
+        id: "entity-facebook",
+        title: "Facebook",
+        year: 2004,
+        description: "Social graphs and the era of online communities.",
+      },
+      {
+        id: "entity-instagram",
+        title: "Instagram",
+        year: 2010,
+        description: "Photo and creator culture becomes mainstream.",
+      },
+      {
+        id: "entity-whatsapp",
+        title: "WhatsApp",
+        year: 2009,
+        description: "Private messaging on mobile.",
+      },
+      {
+        id: "entity-tiktok",
+        title: "TikTok",
+        year: 2016,
+        description: "Short-form video and algorithmic entertainment.",
+      },
+      {
+        id: "entity-chatgpt",
+        title: "ChatGPT",
+        year: 2022,
+        description: "Conversational AI for writing, learning, and planning.",
+      },
+      {
+        id: "entity-iphone",
+        title: "iPhone",
+        year: 2007,
+        description: "Touch computing + app ecosystems for the world.",
+      },
+    ];
+
+  const all = [...events, ...entities];
+
+  const filtered = all
+    .map((e) => ({
+      ...e,
+      date: makeReferenceDateFromYear(e.year),
+    }))
+    .filter((e) => e.date.getTime() >= birthDate.getTime() && e.date.getTime() <= now.getTime());
+
+  // Sort by date and cap to keep layout tidy
+  filtered.sort((a, b) => a.date.getTime() - b.date.getTime());
+  const capped = filtered.slice(-12);
+
+  return capped.map((e) => ({
+    id: e.id,
+    title: e.title,
+    date: e.date,
+    description: e.description,
+  }));
+}
+
+export interface LifeBadge {
+  id: string;
+  title: string;
+  unlocked: boolean;
+  valueText: string;
+}
+
+export function calculateAchievementBadges(
+  birthDate: Date,
+  now: Date,
+): LifeBadge[] {
+  const days = calculateTotalUnits(birthDate, now).days;
+  const lifeStats = calculateLifeStatistics(birthDate, now);
+
+  const badges: Array<{
+    id: string;
+    title: string;
+    unlocked: boolean;
+    valueText: string;
+  }> = [
+      {
+        id: "badge-1000",
+        title: "1,000 Days Survivor",
+        unlocked: days >= 1000,
+        valueText: `${Math.max(0, Math.floor(days))} days lived`,
+      },
+      {
+        id: "badge-5000",
+        title: "5,000 Days Survivor",
+        unlocked: days >= 5000,
+        valueText: `${Math.max(0, Math.floor(days))} days lived`,
+      },
+      {
+        id: "badge-10000",
+        title: "10,000 Days Survivor",
+        unlocked: days >= 10000,
+        valueText: `${Math.max(0, Math.floor(days))} days lived`,
+      },
+      {
+        id: "badge-weekend",
+        title: "Weekend Veteran",
+        unlocked: lifeStats.weekendsLived >= 50,
+        valueText: `${lifeStats.weekendsLived} weekends`,
+      },
+      {
+        id: "badge-olympics",
+        title: "Olympic Witness",
+        unlocked: lifeStats.olympicsSeen >= 1,
+        valueText: `${lifeStats.olympicsSeen} Olympics`,
+      },
+      {
+        id: "badge-leap",
+        title: "Leap Year Witness",
+        unlocked: lifeStats.leapYearsWitnessed >= 1,
+        valueText: `${lifeStats.leapYearsWitnessed} leap years`,
+      },
+      {
+        id: "badge-moon",
+        title: "Moon Cycle Master",
+        unlocked: lifeStats.moonCyclesCompleted >= 100,
+        valueText: `${lifeStats.moonCyclesCompleted} moon cycles`,
+      },
+      {
+        id: "badge-orbit",
+        title: "Earth Orbit Explorer",
+        unlocked: lifeStats.earthOrbitsCompleted >= 1,
+        valueText: `${lifeStats.earthOrbitsCompleted} Earth orbits`,
+      },
+    ];
+
+  return badges.map((b) => ({
+    id: b.id,
+    title: b.title,
+    unlocked: b.unlocked,
+    valueText: b.valueText,
+  }));
+}
+
+export interface PersonalInsightCard {
+  id: string;
+  title: string;
+  description: string;
+  valueText: string;
+}
+
+export function calculatePersonalInsights(
+  birthDate: Date,
+  now: Date,
+): PersonalInsightCard[] {
+  const totalDays = calculateTotalUnits(birthDate, now).days;
+  const lifeStats = calculateLifeStatistics(birthDate, now);
+
+  // Deterministic approximations
+  const sleepHoursPerDay = 8;
+  const sunrisesPerDay = 1;
+  const seasonsPerYear = 4;
+
+  const fullMoons = clampNonNegativeInt(
+    totalDays / 29.530588,
+  );
+
+  const earthTrips = lifeStats.earthOrbitsCompleted;
+
+  const sleepYears = totalDays * sleepHoursPerDay / 24 / 365.25;
+
+  const seasonsLived = (totalDays / 365.25) * seasonsPerYear;
+
+  return [
+    {
+      id: "ins-sleep",
+      title: "Sleep Time",
+      valueText: `${sleepYears.toFixed(1)} years`,
+      description: "Approximate time spent sleeping (8h/day assumption).",
+    },
+    {
+      id: "ins-sunrises",
+      title: "Sunrises Experienced",
+      valueText: `${clampNonNegativeInt(totalDays).toLocaleString()}`,
+      description: "One sunrise per day (local calendar).",
+    },
+    {
+      id: "ins-seasons",
+      title: "Seasons Lived",
+      valueText: `${Math.floor(seasonsLived).toLocaleString()}`,
+      description: "4 seasons per year approximation.",
+    },
+    {
+      id: "ins-moons",
+      title: "Full Moons",
+      valueText: `${fullMoons.toLocaleString()}`,
+      description: "Counted using average lunar cycle length.",
+    },
+    {
+      id: "ins-trips",
+      title: "Earth Trips Around the Sun",
+      valueText: `${earthTrips.toLocaleString()}`,
+      description: "Earth orbits completed (approximate).",
+
+    },
+  ];
+}
+
