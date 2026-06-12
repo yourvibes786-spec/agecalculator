@@ -1,0 +1,1631 @@
+---
+import {
+  calculateExactAge,
+  calculateNextBirthday,
+  calculateTotalUnits,
+  getZodiacSign,
+  getChineseZodiac,
+  calculateMilestones,
+  calculateStats,
+} from "../utils/age";
+---
+
+<div
+  class="relative min-h-screen overflow-hidden flex flex-col justify-between"
+>
+  <!-- Mesh Gradient Background -->
+  <div class="mesh-gradient-bg"></div>
+
+  <!-- Header Nav -->
+  <header
+    class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 h-16 transition-all"
+  >
+    <div
+      class="max-w-[1200px] h-full mx-auto px-4 md:px-6 flex items-center justify-between"
+    >
+      <!-- Title -->
+      <a href="/" class="flex items-center gap-2 focus-ring rounded-sm py-1">
+        <span class="font-mono text-xs font-semibold tracking-widest text-mute"
+          >0.0.1</span
+        >
+        <span
+          class="font-sans font-semibold text-lg tracking-tight select-none text-ink"
+          >AGE CALCULATOR.</span
+        >
+      </a>
+
+      <!-- Reset / New Calculation -->
+      <button
+        id="reset-btn"
+        class="hidden px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+        type="button"
+      >
+        Reset Form
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main
+    class="relative z-10 flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-6 py-12 flex flex-col justify-center"
+  >
+    <!-- 1. LANDING / FORM VIEW -->
+    <div
+      id="landing-view"
+      class="w-full max-w-4xl mx-auto flex flex-col items-center justify-center animate-fade-in"
+    >
+      <!-- Hero Intro -->
+      <div class="text-center mb-10 max-w-2xl">
+        <span
+          class="inline-flex items-center gap-1.5 px-3 py-1 mb-4 rounded-full bg-link-bg-soft border border-link/10 text-link font-mono text-xs font-medium"
+        >
+          <svg
+            class="w-3.5 h-3.5 animate-pulse"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Precise to the second
+        </span>
+        <h1
+          class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-display-xl text-ink leading-tight mb-4 select-text"
+        >
+          Discover your time on Earth.
+        </h1>
+        <p class="text-lg text-body font-normal select-text leading-relaxed">
+          Enter your birth details to calculate your exact age in real time, map
+          cosmic stats, count down to your next birthday, trace key milestones,
+          and generate a customized share card.
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div
+        class="w-full max-w-lg bg-canvas border border-hairline shadow-level-3 rounded-lg p-6 md:p-8 mb-16"
+      >
+        <form id="age-form" class="space-y-6" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Birth Date Input -->
+            <div class="space-y-2">
+              <label
+                for="birth-date"
+                class="block font-mono text-xs font-semibold text-mute tracking-wider uppercase"
+              >
+                Birth Date *
+              </label>
+              <input
+                type="date"
+                id="birth-date"
+                name="birth-date"
+                required
+                aria-required="true"
+                class="w-full h-10 px-3 bg-canvas text-ink border border-hairline focus-ring rounded-sm text-sm font-sans"
+              />
+              <span
+                id="date-error"
+                class="hidden text-xs text-error font-medium flex items-center gap-1 animate-fade-in"
+              >
+                <svg
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  ></path>
+                </svg>
+                Please select a valid past date
+              </span>
+            </div>
+
+            <!-- Birth Time Input -->
+            <div class="space-y-2">
+              <label
+                for="birth-time"
+                class="block font-mono text-xs font-semibold text-mute tracking-wider uppercase"
+              >
+                Birth Time (Optional)
+              </label>
+              <input
+                type="time"
+                id="birth-time"
+                name="birth-time"
+                class="w-full h-10 px-3 bg-canvas text-ink border border-hairline focus-ring rounded-sm text-sm font-sans"
+              />
+            </div>
+          </div>
+
+          <!-- CTA Submit -->
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full h-12 inline-flex items-center justify-center bg-primary hover:bg-neutral-800 text-on-primary font-sans font-medium text-sm rounded-pill focus-ring transition shadow-level-2 cursor-pointer"
+          >
+            Calculate Age.
+          </button>
+
+          <!-- Privacy Footer -->
+          <div
+            class="pt-4 border-t border-hairline flex items-center justify-center gap-2"
+          >
+            <svg
+              class="w-4 h-4 text-mute"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              ></path>
+            </svg>
+            <span
+              class="font-mono text-[10px] text-mute uppercase tracking-widest leading-none"
+            >
+              Privacy First: Calculations run 100% locally
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Feature Grid (3-Up) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+        <!-- Feature 1 -->
+        <div
+          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+        >
+          <div
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Real-time Ticking
+          </h3>
+          <p class="text-sm text-body leading-relaxed">
+            Watch your exact age increment in real time down to the second. Life
+            moves quickly—watch every second count.
+          </p>
+        </div>
+        <!-- Feature 2 -->
+        <div
+          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+        >
+          <div
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h2a2.5 2.5 0 002.5-2.5V10a2 2 0 012-2h1.25M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Cosmic Perspective
+          </h3>
+          <p class="text-sm text-body leading-relaxed">
+            Learn how many miles you have traveled through space, average
+            breaths taken, and moon orbits made during your lifespan.
+          </p>
+        </div>
+        <!-- Feature 3 -->
+        <div
+          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+        >
+          <div
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              ></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Milestone Tracker
+          </h3>
+          <p class="text-sm text-body leading-relaxed">
+            See the exact calendar dates you turn 1,000, 10,000, or 25,000 days
+            lived, and get countdowns to upcoming ones.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. DASHBOARD VIEW -->
+    <div
+      id="dashboard-view"
+      class="hidden w-full flex flex-col gap-10 animate-fade-in"
+    >
+      <!-- Exact Age Banner (Real-time Live Tick) -->
+      <div
+        class="w-full bg-canvas border border-hairline shadow-level-2 rounded-lg p-6 md:p-8 flex flex-col items-center"
+      >
+        <span
+          class="font-mono text-xs font-semibold text-mute tracking-widest uppercase mb-4"
+        >
+          Exact Elapsed Age (Ticking Live)
+        </span>
+
+        <!-- Age counter Grid -->
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full">
+          <!-- Years -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center"
+          >
+            <span
+              id="age-years"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-mute font-semibold tracking-wider uppercase mt-1"
+              >Years</span
+            >
+          </div>
+          <!-- Months -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center"
+          >
+            <span
+              id="age-months"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-mute font-semibold tracking-wider uppercase mt-1"
+              >Months</span
+            >
+          </div>
+          <!-- Days -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center"
+          >
+            <span
+              id="age-days"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-mute font-semibold tracking-wider uppercase mt-1"
+              >Days</span
+            >
+          </div>
+          <!-- Hours -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center"
+          >
+            <span
+              id="age-hours"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-mute font-semibold tracking-wider uppercase mt-1"
+              >Hours</span
+            >
+          </div>
+          <!-- Minutes -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center"
+          >
+            <span
+              id="age-minutes"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-mute font-semibold tracking-wider uppercase mt-1"
+              >Minutes</span
+            >
+          </div>
+          <!-- Seconds -->
+          <div
+            class="bg-canvas-soft border border-hairline shadow-level-1 rounded-sm p-4 flex flex-col items-center text-center border-link/20 ring-1 ring-link/10"
+          >
+            <span
+              id="age-seconds"
+              class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-link tabular-nums"
+              >0</span
+            >
+            <span
+              class="font-mono text-[10px] text-link font-semibold tracking-wider uppercase mt-1 animate-pulse"
+              >Seconds</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Buttons Navigation -->
+      <div
+        class="w-full flex items-center justify-center border-b border-hairline overflow-x-auto no-scrollbar py-1"
+      >
+        <div
+          class="inline-flex space-x-1 bg-canvas-soft-2 p-1 rounded-pill-sm border border-hairline flex-nowrap"
+        >
+          <button
+            type="button"
+            class="tab-btn active px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-on-primary bg-primary"
+            data-tab="overview"
+            id="tab-btn-overview"
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            data-tab="units"
+            id="tab-btn-units"
+          >
+            Time Units
+          </button>
+          <button
+            type="button"
+            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            data-tab="milestones"
+            id="tab-btn-milestones"
+          >
+            Milestones
+          </button>
+          <button
+            type="button"
+            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            data-tab="stats"
+            id="tab-btn-stats"
+          >
+            Fun Facts
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content Panels -->
+      <div id="tab-content" class="w-full">
+        <!-- TAB A: OVERVIEW -->
+        <div
+          id="tab-overview"
+          class="tab-panel w-full grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in"
+        >
+          <!-- Column 1: Next Birthday Countdown -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <div
+                  class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
+                >
+                  <svg
+                    class="w-4.5 h-4.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21 15.546c0 .58-.33 1.1-.86 1.33L12 21l-8.14-4.124a1.5 1.5 0 01-.86-1.33V6.453c0-.58.33-1.1.86-1.33L12 1l8.14 4.124c.53.23.86.75.86 1.33v9.093z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3
+                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+                >
+                  Next Birthday
+                </h3>
+              </div>
+
+              <!-- Countdown Circle Visualizer -->
+              <div class="flex items-center justify-center py-6">
+                <div
+                  class="relative w-40 h-40 flex items-center justify-center"
+                >
+                  <!-- Backgound Circle -->
+                  <svg class="absolute inset-0 w-full h-full -rotate-90">
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="70"
+                      stroke="var(--color-hairline)"
+                      stroke-width="6"
+                      fill="transparent"></circle>
+                    <!-- Progress Circle -->
+                    <circle
+                      id="countdown-progress"
+                      cx="80"
+                      cy="80"
+                      r="70"
+                      stroke="var(--color-primary)"
+                      stroke-width="7"
+                      fill="transparent"
+                      stroke-dasharray="440"
+                      stroke-dashoffset="440"
+                      stroke-linecap="round"
+                      class="transition-all duration-1000 ease-out"></circle>
+                  </svg>
+                  <!-- Value display inside -->
+                  <div
+                    class="flex flex-col items-center justify-center text-center px-4"
+                  >
+                    <span
+                      id="countdown-days"
+                      class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                      >0</span
+                    >
+                    <span
+                      class="font-mono text-[9px] text-mute font-semibold uppercase tracking-widest mt-0.5"
+                      >Days Left</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary Countdown timer details -->
+            <div class="mt-4 pt-4 border-t border-hairline text-center">
+              <p id="countdown-text" class="text-xs text-body font-mono mb-2">
+                0 months & 0 days remaining
+              </p>
+              <div
+                id="countdown-clock"
+                class="text-xs font-mono font-semibold text-primary select-text bg-canvas-soft-2 rounded-sm py-1.5 px-2 tabular-nums"
+              >
+                00:00:00:00
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Astronomical & Birthday Metadata -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
+          >
+            <div class="space-y-6">
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
+                >
+                  <svg
+                    class="w-4.5 h-4.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <h3
+                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+                >
+                  Personal Profile
+                </h3>
+              </div>
+
+              <!-- Metrics -->
+              <div class="space-y-4">
+                <!-- Day Born -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-hairline"
+                >
+                  <span class="text-sm text-body font-medium">Day of Birth</span
+                  >
+                  <span
+                    id="profile-day-born"
+                    class="font-mono text-xs font-semibold text-primary"
+                    >Unknown</span
+                  >
+                </div>
+                <!-- Zodiac -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-hairline"
+                >
+                  <span class="text-sm text-body font-medium">Zodiac Sign</span>
+                  <span class="flex items-center gap-1.5">
+                    <span id="profile-zodiac-symbol" class="text-sm">♈</span>
+                    <span
+                      id="profile-zodiac-name"
+                      class="font-sans text-sm font-semibold text-primary"
+                      >Aries</span
+                    >
+                    <span
+                      id="profile-zodiac-dates"
+                      class="font-mono text-[10px] text-mute font-semibold"
+                      >Mar 21 - Apr 19</span
+                    >
+                  </span>
+                </div>
+                <!-- Chinese Zodiac -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-hairline"
+                >
+                  <span class="text-sm text-body font-medium"
+                    >Chinese Zodiac</span
+                  >
+                  <span class="flex items-center gap-1.5">
+                    <span id="profile-chinese-symbol" class="text-sm">🐀</span>
+                    <span
+                      id="profile-chinese-name"
+                      class="font-sans text-sm font-semibold text-primary"
+                      >Rat</span
+                    >
+                    <span
+                      id="profile-chinese-element"
+                      class="font-mono text-[10px] text-mute bg-canvas-soft px-1.5 py-0.5 rounded border border-hairline font-semibold"
+                      >Metal</span
+                    >
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chinese traits summary -->
+            <div
+              id="profile-chinese-traits"
+              class="mt-4 p-3 bg-canvas-soft border border-hairline rounded-sm font-mono text-[10px] text-mute uppercase tracking-wider leading-relaxed"
+            >
+              Traits description
+            </div>
+          </div>
+
+          <!-- Column 3: Share Card & Actions -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <div
+                  class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
+                >
+                  <svg
+                    class="w-4.5 h-4.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.684 10.742l4.636-2.318a3 3 0 11.83 1.666L9.5 12.4a3 3 0 110 3.2l4.647-2.324a3 3 0 11-.83 1.667l-4.647 2.324a3 3 0 11-4.636-3.722L8.684 10.74M15 6.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3
+                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+                >
+                  Share Progress
+                </h3>
+              </div>
+
+              <!-- Share Preview card -->
+              <div
+                class="relative w-full rounded border border-hairline overflow-hidden p-4 bg-canvas-soft shadow-level-1 aspect-[16/9] flex flex-col justify-between select-none border-dashed mb-4"
+              >
+                <div class="mesh-gradient-bg absolute inset-0 opacity-60"></div>
+                <div class="relative flex justify-between items-start">
+                  <div>
+                    <span
+                      class="font-mono text-[9px] text-mute uppercase tracking-widest font-semibold block leading-none"
+                      >Age Summary</span
+                    >
+                    <span
+                      id="share-card-date"
+                      class="font-mono text-[8px] text-mute mt-1 block"
+                      >Date</span
+                    >
+                  </div>
+                  <span
+                    class="font-sans font-semibold text-[10px] tracking-tight text-ink"
+                    >AGE CALCULATOR.</span
+                  >
+                </div>
+                <div class="relative py-2">
+                  <span
+                    id="share-card-age"
+                    class="text-base font-bold text-ink leading-tight tracking-tight block"
+                    >Calculating...</span
+                  >
+                  <span
+                    id="share-card-days"
+                    class="font-mono text-[9px] text-link font-semibold uppercase tracking-wider mt-1 block"
+                    >Calculating...</span
+                  >
+                </div>
+                <div
+                  class="relative flex justify-between items-end border-t border-hairline/50 pt-2 font-mono text-[8px] text-mute"
+                >
+                  <span id="share-card-zodiac">Zodiac</span>
+                  <span>100% local calculation</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="space-y-2">
+              <button
+                type="button"
+                id="copy-summary-btn"
+                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                  ></path>
+                </svg>
+                <span id="copy-btn-text">Copy Summary Text</span>
+              </button>
+
+              <button
+                type="button"
+                id="download-card-btn"
+                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-xs focus-ring transition shadow-level-1 cursor-pointer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  ></path>
+                </svg>
+                Download Share Card
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB B: TIME UNITS -->
+        <div
+          id="tab-units"
+          class="tab-panel hidden w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in"
+        >
+          <!-- Months -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Months</span
+            >
+            <span
+              id="unit-months"
+              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >Exact number of calendar months lived.</span
+            >
+          </div>
+          <!-- Weeks -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Weeks</span
+            >
+            <span
+              id="unit-weeks"
+              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >The total number of weeks lived.</span
+            >
+          </div>
+          <!-- Days -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Days</span
+            >
+            <span
+              id="unit-days"
+              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >The absolute number of days you have walked the Earth.</span
+            >
+          </div>
+          <!-- Hours -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Hours</span
+            >
+            <span
+              id="unit-hours"
+              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >Total elapsed hour clock of your life.</span
+            >
+          </div>
+          <!-- Minutes -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Minutes</span
+            >
+            <span
+              id="unit-minutes"
+              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >Total elapsed minutes lived.</span
+            >
+          </div>
+          <!-- Seconds -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
+          >
+            <span
+              class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+              >Total Seconds</span
+            >
+            <span
+              id="unit-seconds"
+              class="text-3xl font-bold tracking-tight text-link tabular-nums"
+              >0</span
+            >
+            <span class="text-xs text-body block mt-2 leading-relaxed"
+              >Total seconds tick counter. Watch it increase live!</span
+            >
+          </div>
+        </div>
+
+        <!-- TAB C: MILESTONES -->
+        <div
+          id="tab-milestones"
+          class="tab-panel hidden w-full bg-canvas border border-hairline shadow-level-2 rounded-lg p-6 md:p-8 animate-fade-in"
+        >
+          <div class="max-w-2xl mx-auto">
+            <div class="flex items-center gap-2 mb-8">
+              <div
+                class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
+              >
+                <svg
+                  class="w-4.5 h-4.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  ></path>
+                </svg>
+              </div>
+              <h3
+                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
+              >
+                Milestone Roadmap
+              </h3>
+            </div>
+
+            <!-- Timeline Container -->
+            <div
+              id="milestones-timeline"
+              class="relative pl-6 md:pl-8 border-l border-hairline space-y-8 py-2"
+            >
+              <!-- Elements will be dynamically rendered here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB D: FUN FACTS / STATS -->
+        <div
+          id="tab-stats"
+          class="tab-panel hidden w-full grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in"
+        >
+          <!-- Heartbeats -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
+          >
+            <div
+              class="w-12 h-12 rounded bg-error-soft/30 border border-error-soft text-error flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-6 h-6 animate-bounce"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <span
+                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+                >Total Heartbeats (Est.)</span
+              >
+              <span
+                id="stat-heartbeats"
+                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                >0</span
+              >
+              <p class="text-xs text-body leading-relaxed mt-2 select-text">
+                Calculated on an average human resting heart rate of 80 beats
+                per minute (bpm).
+              </p>
+            </div>
+          </div>
+
+          <!-- Breaths -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
+          >
+            <div
+              class="w-12 h-12 rounded bg-cyan-soft/20 border border-cyan-deep/20 text-cyan-deep flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <span
+                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+                >Total Breaths (Est.)</span
+              >
+              <span
+                id="stat-breaths"
+                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                >0</span
+              >
+              <p class="text-xs text-body leading-relaxed mt-2 select-text">
+                Calculated on an average human resting breathing rate of 16
+                breaths per minute.
+              </p>
+            </div>
+          </div>
+
+          <!-- Moon Orbits -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
+          >
+            <div
+              class="w-12 h-12 rounded bg-warning-soft border border-warning-deep/10 text-warning-deep flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <span
+                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+                >Moon Orbits Lived</span
+              >
+              <span
+                id="stat-moon-orbits"
+                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                >0</span
+              >
+              <p class="text-xs text-body leading-relaxed mt-2 select-text">
+                The number of complete orbits the Moon has made around the Earth
+                since your birth (orbit period is roughly 27.3 days).
+              </p>
+            </div>
+          </div>
+
+          <!-- Solar Travel -->
+          <div
+            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
+          >
+            <div
+              class="w-12 h-12 rounded bg-link-bg-soft/30 border border-link/10 text-link flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <span
+                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
+                >Solar Journey Distance</span
+              >
+              <span
+                id="stat-solar-travel"
+                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                >0</span
+              >
+              <span class="text-sm font-sans font-medium text-body ml-1"
+                >km</span
+              >
+              <p class="text-xs text-body leading-relaxed mt-2 select-text">
+                The total distance you have traveled relative to the Sun as the
+                Earth speeds through space at roughly 29.78 km/s.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer block -->
+  <footer
+    class="relative z-10 w-full bg-canvas/40 border-t border-hairline py-8 transition-all"
+  >
+    <div
+      class="max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+    >
+      <div
+        class="flex items-center gap-1.5 font-mono text-[10px] text-mute font-semibold uppercase tracking-wider"
+      >
+        <span>Age Calculator</span>
+        <span>•</span>
+        <span>Local Browser Calculations</span>
+      </div>
+      <div class="text-[11px] text-mute flex gap-4 font-medium">
+        <a href="#" class="hover:text-ink focus-ring rounded-sm"
+          >Privacy policy</a
+        >
+        <a href="#" class="hover:text-ink focus-ring rounded-sm"
+          >Terms of service</a
+        >
+      </div>
+    </div>
+  </footer>
+
+  <!-- Invisible Anchor Canvas for Share Card PNG Rendering -->
+  <canvas id="share-card-canvas" width="1200" height="630" class="hidden"
+  ></canvas>
+</div>
+
+<script>
+  import {
+    calculateExactAge,
+    calculateNextBirthday,
+    calculateTotalUnits,
+    getZodiacSign,
+    getChineseZodiac,
+    calculateMilestones,
+    calculateStats,
+  } from "../utils/age";
+
+  // Global variables to store the active birthdate
+  let activeBirthDate: Date | null = null;
+  let timerId: any = null;
+
+  // DOM Elements
+  const landingView = document.getElementById("landing-view")!;
+  const dashboardView = document.getElementById("dashboard-view")!;
+  const ageForm = document.getElementById("age-form") as HTMLFormElement;
+  const birthDateInput = document.getElementById(
+    "birth-date",
+  ) as HTMLInputElement;
+  const birthTimeInput = document.getElementById(
+    "birth-time",
+  ) as HTMLInputElement;
+  const dateError = document.getElementById("date-error")!;
+  const resetBtn = document.getElementById("reset-btn")!;
+
+  // Counter Elements
+  const yCounter = document.getElementById("age-years")!;
+  const mCounter = document.getElementById("age-months")!;
+  const dCounter = document.getElementById("age-days")!;
+  const hCounter = document.getElementById("age-hours")!;
+  const minCounter = document.getElementById("age-minutes")!;
+  const sCounter = document.getElementById("age-seconds")!;
+
+  // Unit Elements
+  const mTotal = document.getElementById("unit-months")!;
+  const wTotal = document.getElementById("unit-weeks")!;
+  const dTotal = document.getElementById("unit-days")!;
+  const hTotal = document.getElementById("unit-hours")!;
+  const minTotal = document.getElementById("unit-minutes")!;
+  const sTotal = document.getElementById("unit-seconds")!;
+
+  // Overview Profile Elements
+  const profileDayBorn = document.getElementById("profile-day-born")!;
+  const profileZodiacSymbol = document.getElementById("profile-zodiac-symbol")!;
+  const profileZodiacName = document.getElementById("profile-zodiac-name")!;
+  const profileZodiacDates = document.getElementById("profile-zodiac-dates")!;
+  const profileChineseSymbol = document.getElementById(
+    "profile-chinese-symbol",
+  )!;
+  const profileChineseName = document.getElementById("profile-chinese-name")!;
+  const profileChineseElement = document.getElementById(
+    "profile-chinese-element",
+  )!;
+  const profileChineseTraits = document.getElementById(
+    "profile-chinese-traits",
+  )!;
+
+  // Next Birthday Countdown Elements
+  const countdownProgress = document.getElementById(
+    "countdown-progress",
+  ) as unknown as SVGCircleElement;
+  const countdownDays = document.getElementById("countdown-days")!;
+  const countdownText = document.getElementById("countdown-text")!;
+  const countdownClock = document.getElementById("countdown-clock")!;
+
+  // Milestones timeline
+  const milestonesTimeline = document.getElementById("milestones-timeline")!;
+
+  // Fun Stats Elements
+  const statHeartbeats = document.getElementById("stat-heartbeats")!;
+  const statBreaths = document.getElementById("stat-breaths")!;
+  const statMoonOrbits = document.getElementById("stat-moon-orbits")!;
+  const statSolarTravel = document.getElementById("stat-solar-travel")!;
+
+  // Action Elements
+  const copySummaryBtn = document.getElementById("copy-summary-btn")!;
+  const copyBtnText = document.getElementById("copy-btn-text")!;
+  const downloadCardBtn = document.getElementById("download-card-btn")!;
+
+  // Share Card Static DOM elements
+  const shareCardDate = document.getElementById("share-card-date")!;
+  const shareCardAge = document.getElementById("share-card-age")!;
+  const shareCardDays = document.getElementById("share-card-days")!;
+  const shareCardZodiac = document.getElementById("share-card-zodiac")!;
+
+  // 1. Initial State / LocalStorage loading
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedDate = localStorage.getItem("birth-date");
+    const savedTime = localStorage.getItem("birth-time");
+
+    // Set default max date to today
+    const today = new Date().toISOString().split("T")[0];
+    birthDateInput.max = today;
+
+    if (savedDate) {
+      birthDateInput.value = savedDate;
+      if (savedTime) birthTimeInput.value = savedTime;
+
+      const birthDate = parseBirthDateTime(savedDate, savedTime || "00:00");
+      if (birthDate && birthDate.getTime() < new Date().getTime()) {
+        activateDashboard(birthDate);
+      }
+    }
+  });
+
+  // Helper to parse birthdate inputs
+  function parseBirthDateTime(dateStr: string, timeStr: string): Date | null {
+    if (!dateStr) return null;
+    const time = timeStr || "00:00";
+    const date = new Date(`${dateStr}T${time}`);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // 2. Tab Navigation Trigger
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabPanels = document.querySelectorAll(".tab-panel");
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetTab = btn.getAttribute("data-tab");
+
+      // Update buttons style
+      tabButtons.forEach((b) => {
+        b.classList.remove("active", "text-on-primary", "bg-primary");
+        b.classList.add("text-body", "hover:text-ink", "hover:bg-canvas");
+      });
+      btn.classList.add("active", "text-on-primary", "bg-primary");
+      btn.classList.remove("text-body", "hover:text-ink", "hover:bg-canvas");
+
+      // Update panel visibility
+      tabPanels.forEach((panel) => {
+        panel.classList.add("hidden");
+      });
+      document.getElementById(`tab-${targetTab}`)?.classList.remove("hidden");
+    });
+  });
+
+  // 3. Form Submission
+  ageForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    dateError.classList.add("hidden");
+
+    const dateVal = birthDateInput.value;
+    const timeVal = birthTimeInput.value || "00:00";
+
+    const birthDate = parseBirthDateTime(dateVal, timeVal);
+
+    if (!birthDate || birthDate.getTime() >= new Date().getTime()) {
+      dateError.classList.remove("hidden");
+      return;
+    }
+
+    // Save to LocalStorage
+    localStorage.setItem("birth-date", dateVal);
+    localStorage.setItem("birth-time", timeVal);
+
+    activateDashboard(birthDate);
+  });
+
+  // 4. Activate Dashboard
+  function activateDashboard(birthDate: Date) {
+    activeBirthDate = birthDate;
+
+    // Hide form, show dashboard
+    landingView.classList.add("hidden");
+    dashboardView.classList.remove("hidden");
+    resetBtn.classList.remove("hidden");
+
+    // Run first calculations
+    runCalculations(true);
+
+    // Set interval for live counter updates (every second)
+    if (timerId) clearInterval(timerId);
+    timerId = setInterval(() => runCalculations(false), 1000);
+  }
+
+  // 5. Reset Form Actions
+  resetBtn.addEventListener("click", () => {
+    // Clear state
+    activeBirthDate = null;
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+    }
+
+    // Clear inputs and LocalStorage
+    birthDateInput.value = "";
+    birthTimeInput.value = "";
+    localStorage.removeItem("birth-date");
+    localStorage.removeItem("birth-time");
+
+    // Hide dashboard, show form
+    dashboardView.classList.add("hidden");
+    resetBtn.classList.add("hidden");
+    landingView.classList.remove("hidden");
+
+    // Reset tabs
+    document.getElementById("tab-btn-overview")?.click();
+  });
+
+  // 6. Primary Calculation Runner
+  // runs once with full = true (renders DOM nodes like Milestones that don't need second-by-second changes)
+  function runCalculations(firstLoad: boolean) {
+    if (!activeBirthDate) return;
+    const now = new Date();
+
+    // Calculate details
+    const age = calculateExactAge(activeBirthDate, now);
+    const nextBDay = calculateNextBirthday(activeBirthDate, now);
+    const totalUnits = calculateTotalUnits(activeBirthDate, now);
+    const zodiac = getZodiacSign(activeBirthDate);
+    const chineseZ = getChineseZodiac(activeBirthDate.getFullYear());
+    const stats = calculateStats(activeBirthDate, now);
+
+    // Update Exact Age Display
+    yCounter.textContent = age.years.toString();
+    mCounter.textContent = age.months.toString();
+    dCounter.textContent = age.days.toString();
+    hCounter.textContent = age.hours.toString();
+    minCounter.textContent = age.minutes.toString();
+    sCounter.textContent = age.seconds.toString();
+
+    // Update Total Units
+    mTotal.textContent = totalUnits.months.toLocaleString();
+    wTotal.textContent = totalUnits.weeks.toLocaleString();
+    dTotal.textContent = totalUnits.days.toLocaleString();
+    hTotal.textContent = totalUnits.hours.toLocaleString();
+    minTotal.textContent = totalUnits.minutes.toLocaleString();
+    sTotal.textContent = totalUnits.seconds.toLocaleString();
+
+    // Update Cosmic / Biological stats
+    statHeartbeats.textContent = stats.heartbeats.toLocaleString();
+    statBreaths.textContent = stats.breaths.toLocaleString();
+    statMoonOrbits.textContent = stats.moonOrbits.toLocaleString();
+    statSolarTravel.textContent = stats.solarTravelKm.toLocaleString();
+
+    // Update Birthday countdown
+    countdownDays.textContent = nextBDay.daysRemaining.toString();
+
+    let countdownDesc = "";
+    if (nextBDay.months > 0) {
+      countdownDesc += `${nextBDay.months} month${nextBDay.months > 1 ? "s" : ""}`;
+    }
+    if (nextBDay.days > 0) {
+      countdownDesc += `${nextBDay.months > 0 ? " & " : ""}${nextBDay.days} day${nextBDay.days > 1 ? "s" : ""}`;
+    }
+    if (countdownDesc === "") {
+      countdownDesc = "Birthday is today!";
+    } else {
+      countdownDesc += " left";
+    }
+    countdownText.textContent = countdownDesc;
+
+    // Countdown Clock text (format: DD:HH:MM:SS)
+    const pad = (num: number) => num.toString().padStart(2, "0");
+    countdownClock.textContent = `${pad(nextBDay.daysRemaining)}D : ${pad(nextBDay.hours)}H : ${pad(nextBDay.minutes)}M : ${pad(nextBDay.seconds)}S`;
+
+    // SVG Progress Circular Offset (Circumference of radius 70 is 2 * PI * 70 = 439.8, round to 440)
+    const circumference = 440;
+    // Year progress is estimated based on remaining days of 365
+    const progressPercent = Math.min(
+      1,
+      Math.max(0, 1 - nextBDay.daysRemaining / 365.25),
+    );
+    const strokeOffset = circumference * (1 - progressPercent);
+    if (countdownProgress) {
+      countdownProgress.style.strokeDashoffset = strokeOffset.toString();
+    }
+
+    // Update static profile only on firstLoad or when it changes
+    if (firstLoad) {
+      const daysOfWeek = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      profileDayBorn.textContent = daysOfWeek[activeBirthDate.getDay()];
+
+      profileZodiacSymbol.textContent = zodiac.symbol;
+      profileZodiacName.textContent = zodiac.name;
+      profileZodiacDates.textContent = zodiac.dates;
+
+      profileChineseSymbol.textContent = chineseZ.symbol;
+      profileChineseName.textContent = chineseZ.name;
+      profileChineseElement.textContent = chineseZ.element;
+      profileChineseTraits.textContent = `Year of the ${chineseZ.name} (${chineseZ.element}): ${chineseZ.traits}`;
+
+      // Render static share card text preview
+      const dateOptions: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      shareCardDate.textContent = activeBirthDate.toLocaleDateString(
+        "en-US",
+        dateOptions,
+      );
+      shareCardZodiac.textContent = `${zodiac.name} ${zodiac.symbol}  |  ${chineseZ.element} ${chineseZ.name} ${chineseZ.symbol}`;
+
+      // Render Milestones Roadmap
+      renderMilestonesRoadmap(activeBirthDate, now);
+    }
+
+    // Keep age preview in Share Card updated
+    shareCardAge.textContent = `${age.years}Y, ${age.months}M, ${age.days}D`;
+    shareCardDays.textContent = `${totalUnits.days.toLocaleString()} Days Lived`;
+  }
+
+  // 7. Render Timeline milestones
+  function renderMilestonesRoadmap(birthDate: Date, now: Date) {
+    const milestones = calculateMilestones(birthDate, now);
+    milestonesTimeline.innerHTML = "";
+
+    milestones.forEach((milestone, idx) => {
+      const isPast = milestone.isPast;
+      const formattedDate = milestone.date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
+      const itemNode = document.createElement("div");
+      itemNode.className = "relative animate-fade-in";
+      itemNode.style.animationDelay = `${idx * 0.05}s`;
+
+      // Find the milestone indicator node layout
+      let indicatorHtml = "";
+      let highlightClass = "";
+
+      if (isPast) {
+        // Achieved milestone - small green checkmark or neutral ink icon
+        indicatorHtml = `
+          <div class="absolute -left-[31px] md:-left-[39px] top-1 w-5 h-5 md:w-7 md:h-7 rounded-full bg-canvas border border-hairline flex items-center justify-center text-link shadow-level-1">
+            <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        `;
+        highlightClass = "opacity-60";
+      } else {
+        // Future milestone
+        // If it's the very first future milestone, highlight it as the "next landmark"!
+        const previousWasPast = idx > 0 ? milestones[idx - 1].isPast : false;
+        const isNextUpcoming = idx === 0 ? true : previousWasPast;
+
+        if (isNextUpcoming) {
+          indicatorHtml = `
+            <div class="absolute -left-[35px] md:-left-[43px] top-0.5 w-7 h-7 md:w-9 md:h-9 rounded-full bg-canvas border-2 border-link flex items-center justify-center text-link shadow-level-2 z-10 animate-pulse">
+              <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+          `;
+          highlightClass =
+            "border border-link/20 ring-2 ring-link/5 rounded-md p-4 bg-canvas shadow-level-3";
+        } else {
+          indicatorHtml = `
+            <div class="absolute -left-[29px] md:-left-[37px] top-1.5 w-4 h-4 md:w-6 md:h-6 rounded-full bg-canvas border border-hairline flex items-center justify-center text-mute shadow-level-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-hairline-strong"></span>
+            </div>
+          `;
+          highlightClass =
+            "border border-hairline rounded-sm p-4 bg-canvas-soft shadow-level-1";
+        }
+      }
+
+      // Generate HTML
+      let footerHtml = "";
+      if (isPast) {
+        footerHtml = `<span class="font-mono text-[9px] text-mute uppercase tracking-widest font-semibold">Achieved</span>`;
+      } else {
+        footerHtml = `<span class="font-mono text-[9px] text-link uppercase tracking-widest font-semibold">In ${milestone.daysDifference.toLocaleString()} Days</span>`;
+      }
+
+      itemNode.innerHTML = `
+        ${indicatorHtml}
+        <div class="ml-4 md:ml-6 flex flex-col md:flex-row md:items-center justify-between gap-2 ${highlightClass}">
+          <div>
+            <h4 class="text-sm font-semibold text-ink leading-tight">${milestone.label}</h4>
+            <p class="text-[11px] text-body mt-0.5">${formattedDate}</p>
+          </div>
+          <div class="flex items-center shrink-0">
+            ${footerHtml}
+          </div>
+        </div>
+      `;
+
+      milestonesTimeline.appendChild(itemNode);
+    });
+  }
+
+  // 8. Copy Summary text to clipboard
+  copySummaryBtn.addEventListener("click", () => {
+    if (!activeBirthDate) return;
+    const now = new Date();
+    const age = calculateExactAge(activeBirthDate, now);
+    const nextBDay = calculateNextBirthday(activeBirthDate, now);
+    const units = calculateTotalUnits(activeBirthDate, now);
+    const zodiac = getZodiacSign(activeBirthDate);
+    const chineseZ = getChineseZodiac(activeBirthDate.getFullYear());
+
+    let bdayText = "";
+    if (nextBDay.months > 0 && nextBDay.days > 0) {
+      bdayText = `${nextBDay.months} months and ${nextBDay.days} days`;
+    } else if (nextBDay.months > 0) {
+      bdayText = `${nextBDay.months} months`;
+    } else if (nextBDay.days > 0) {
+      bdayText = `${nextBDay.days} days`;
+    } else {
+      bdayText = "today!";
+    }
+
+    const message =
+      `I am exactly ${age.years} years, ${age.months} months, and ${age.days} days old today!\n` +
+      `Total days lived: ${units.days.toLocaleString()} days 🌏\n` +
+      `Next birthday in: ${bdayText}\n` +
+      `Zodiac: ${zodiac.name} ${zodiac.symbol}  |  Chinese Zodiac: ${chineseZ.name} ${chineseZ.symbol}\n` +
+      `Calculate your exact age at: ${window.location.origin}`;
+
+    navigator.clipboard
+      .writeText(message)
+      .then(() => {
+        copyBtnText.textContent = "Copied to Clipboard!";
+        setTimeout(() => {
+          copyBtnText.textContent = "Copy Summary Text";
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error("Clipboard copy failed", err);
+      });
+  });
+
+  // 9. Download Share Card (HTML5 Canvas PNG Renderer)
+  downloadCardBtn.addEventListener("click", () => {
+    if (!activeBirthDate) return;
+    const now = new Date();
+    const age = calculateExactAge(activeBirthDate, now);
+    const units = calculateTotalUnits(activeBirthDate, now);
+    const zodiac = getZodiacSign(activeBirthDate);
+    const chineseZ = getChineseZodiac(activeBirthDate.getFullYear());
+
+    const canvas = document.getElementById(
+      "share-card-canvas",
+    ) as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Draw background (Vercel stark canvas style with soft gradient meshes)
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, 1200, 630);
+
+    // Draw gradient accent circles
+    // Blue spot top center
+    let grad1 = ctx.createRadialGradient(600, 0, 0, 600, 0, 500);
+    grad1.addColorStop(0, "rgba(0, 112, 243, 0.1)");
+    grad1.addColorStop(1, "rgba(255, 255, 255, 0)");
+    ctx.fillStyle = grad1;
+    ctx.fillRect(0, 0, 1200, 630);
+
+    // Mint/Cyan spot top left
+    let grad2 = ctx.createRadialGradient(0, 0, 0, 0, 0, 500);
+    grad2.addColorStop(0, "rgba(80, 227, 194, 0.12)");
+    grad2.addColorStop(1, "rgba(255, 255, 255, 0)");
+    ctx.fillStyle = grad2;
+    ctx.fillRect(0, 0, 1200, 630);
+
+    // Pink spot top right
+    let grad3 = ctx.createRadialGradient(1200, 0, 0, 1200, 0, 500);
+    grad3.addColorStop(0, "rgba(255, 0, 128, 0.08)");
+    grad3.addColorStop(1, "rgba(255, 255, 255, 0)");
+    ctx.fillStyle = grad3;
+    ctx.fillRect(0, 0, 1200, 630);
+
+    // Draw card inner border
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#ebebeb";
+    ctx.strokeRect(50, 50, 1100, 530);
+
+    // Draw headers
+    ctx.fillStyle = "#888888";
+    ctx.font = "bold 20px monospace";
+    ctx.fillText("AGE REPORT", 100, 110);
+
+    // Draw date born
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const dateStr = activeBirthDate.toLocaleDateString("en-US", dateOptions);
+    ctx.fillStyle = "#4d4d4d";
+    ctx.font = "24px sans-serif";
+    ctx.fillText(`Born: ${dateStr}`, 100, 155);
+
+    // Brand watermark
+    ctx.fillStyle = "#171717";
+    ctx.font = "bold 24px sans-serif";
+    ctx.fillText("AGE CALCULATOR.", 900, 110);
+
+    // Large main counter representation
+    ctx.fillStyle = "#171717";
+    ctx.font = "bold 84px sans-serif";
+    ctx.fillText(`${age.years} Years old.`, 100, 310);
+
+    ctx.fillStyle = "#4d4d4d";
+    ctx.font = "normal 36px sans-serif";
+    ctx.fillText(
+      `${age.months} months, ${age.days} days, ${age.hours} hours`,
+      100,
+      380,
+    );
+
+    // Total metrics lived
+    ctx.fillStyle = "#0070f3";
+    ctx.font = "bold 28px monospace";
+    ctx.fillText(
+      `${units.days.toLocaleString()} Days Lived on Earth`,
+      100,
+      450,
+    );
+
+    // Divider line
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(235, 235, 235, 0.6)";
+    ctx.beginPath();
+    ctx.moveTo(100, 500);
+    ctx.lineTo(1100, 500);
+    ctx.stroke();
+
+    // Footer profiles
+    ctx.fillStyle = "#888888";
+    ctx.font = "20px sans-serif";
+    ctx.fillText(
+      `Astrology: ${zodiac.name} ${zodiac.symbol}  |  Lunar Zodiac: ${chineseZ.element} ${chineseZ.name} ${chineseZ.symbol}`,
+      100,
+      545,
+    );
+
+    ctx.fillStyle = "#888888";
+    ctx.font = "16px monospace";
+    ctx.fillText("Calculations 100% private & secure.", 810, 545);
+
+    // Trigger download of canvas image
+    const link = document.createElement("a");
+    link.download = `my-exact-age-${age.years}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+</script>
