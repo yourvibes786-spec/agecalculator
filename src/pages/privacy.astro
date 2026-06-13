@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Privacy Policy — Age Calculator" description="Privacy policy for the Age Calculator. All calculations run 100% locally in your browser. No data is collected, stored, or transmitted.">
+  <div class="min-h-screen flex flex-col">
+    <!-- Simple Nav Header -->
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+      <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+          <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">0.0.1</span>
+          <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
+        </a>
+        <a href="/"
+          class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+        >← Back to Home</a>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20">
+      <article class="prose prose-sm md:prose-base max-w-none">
+        <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">Privacy Policy</h1>
+        <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Last updated: June 2026</p>
+
+        <div class="space-y-6 text-body text-sm md:text-base leading-relaxed">
+          <section>
+            <h2 class="text-lg font-semibold text-ink mb-3">Your Privacy Matters</h2>
+            <p>This tool is designed with privacy as a core principle. Below is what you can expect when you use the Age Calculator.</p>
+          </section>
+
+          <section class="bg-canvas border border-hairline rounded-lg p-5 md:p-6">
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">All calculations run locally</strong>
+                  <span class="text-body text-sm">Every age calculation happens directly in your browser. No server requests are made.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">No birth dates are stored</strong>
+                  <span class="text-body text-sm">Your birth date is never saved on any server. It exists only in your browser's local storage for convenience and can be cleared at any time.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">No accounts required</strong>
+                  <span class="text-body text-sm">There is no sign-up, login, or user registration. Just open the page and use the tool.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">No personal information collected</strong>
+                  <span class="text-body text-sm">We do not collect, track, or store any personally identifiable information (PII).</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">No data transmitted</strong>
+                  <span class="text-body text-sm">Your age data never leaves your device. No analytics, no telemetry, no external API calls.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">Data never leaves your device</strong>
+                  <span class="text-body text-sm">Everything you enter stays on your computer or phone. Close the tab and it is gone.</span>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-lg font-semibold text-ink mb-3">Third-Party Services</h2>
+            <p>This site uses Google Fonts (Inter and JetBrains Mono) for typography. No other third-party scripts, trackers, or services are loaded. No cookies are set by this application.</p>
+          </section>
+
+          <section>
+            <h2 class="text-lg font-semibold text-ink mb-3">Changes to This Policy</h2>
+            <p>If this privacy policy changes, the "Last updated" date at the top will reflect the revision. Continued use of the tool after changes constitutes acceptance of the updated policy.</p>
+          </section>
+
+          <div class="pt-6 border-t border-hairline">
+            <a href="/"
+              class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-sm focus-ring transition shadow-level-2"
+            >← Back to Age Calculator</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-canvas/40 border-t border-hairline py-8">
+      <div class="max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-1.5 font-mono text-[10px] text-mute font-semibold uppercase tracking-wider">
+          <span>Age Calculator</span>
+          <span>•</span>
+          <span>v1.0.0</span>
+          <span>•</span>
+          <span>Privacy-First</span>
+        </div>
+        <div class="text-[11px] text-mute flex gap-4 font-medium">
+          <a href="/privacy" class="hover:text-ink focus-ring rounded-sm">Privacy policy</a>
+          <a href="/terms" class="hover:text-ink focus-ring rounded-sm">Terms of service</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</Layout>
