@@ -1,15 +1,5 @@
 ---
-import {
-  calculateExactAge,
-  calculateNextBirthday,
-  calculateTotalUnits,
-  getZodiacSign,
-  getChineseZodiac,
-  calculateMilestones,
-  calculateStats,
-  calculateLifeProgress,
-  calculatePlanetaryAges,
-} from "../utils/age";
+// All calculations run client-side. No server imports needed.
 ---
 
 <div
@@ -396,12 +386,16 @@ import {
       <!-- Tab Buttons Navigation -->
       <div
         class="w-full flex items-center justify-center border-b border-hairline overflow-x-auto no-scrollbar py-1"
+        role="tablist"
+        aria-label="Dashboard sections"
       >
         <div
           class="inline-flex space-x-1 bg-canvas-soft-2 p-1 rounded-pill-sm border border-hairline flex-nowrap"
         >
           <button
             type="button"
+            role="tab"
+            aria-selected="true"
             class="tab-btn active px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-on-primary bg-primary"
             data-tab="overview"
             id="tab-btn-overview"
@@ -410,6 +404,8 @@ import {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected="false"
             class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
             data-tab="units"
             id="tab-btn-units"
@@ -418,6 +414,8 @@ import {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected="false"
             class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
             data-tab="milestones"
             id="tab-btn-milestones"
@@ -426,6 +424,8 @@ import {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected="false"
             class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
             data-tab="stats"
             id="tab-btn-stats"
@@ -440,6 +440,8 @@ import {
         <!-- TAB A: OVERVIEW -->
         <div
           id="tab-overview"
+          role="tabpanel"
+          aria-labelledby="tab-btn-overview"
           class="tab-panel w-full flex flex-col gap-8 animate-fade-in"
         >
           <!-- Row 1: Next Birthday + Personal Profile (2-col) -->
@@ -680,6 +682,8 @@ import {
         <!-- TAB B: TIME UNITS -->
         <div
           id="tab-units"
+          role="tabpanel"
+          aria-labelledby="tab-btn-units"
           class="tab-panel hidden w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in"
         >
           <!-- Months -->
@@ -789,6 +793,8 @@ import {
         <!-- TAB C: MILESTONES -->
         <div
           id="tab-milestones"
+          role="tabpanel"
+          aria-labelledby="tab-btn-milestones"
           class="tab-panel hidden w-full bg-canvas border border-hairline shadow-level-2 rounded-lg p-6 md:p-8 animate-fade-in"
         >
           <div class="max-w-2xl mx-auto">
@@ -830,6 +836,8 @@ import {
         <!-- TAB D: FUN FACTS / STATS -->
         <div
           id="tab-stats"
+          role="tabpanel"
+          aria-labelledby="tab-btn-stats"
           class="tab-panel hidden w-full grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in"
         >
           <!-- Solar Travel -->
@@ -1268,19 +1276,24 @@ import {
     btn.addEventListener("click", () => {
       const targetTab = btn.getAttribute("data-tab");
 
-      // Update buttons style
+      // Update buttons style + ARIA
       tabButtons.forEach((b) => {
         b.classList.remove("active", "text-on-primary", "bg-primary");
         b.classList.add("text-body", "hover:text-ink", "hover:bg-canvas");
+        b.setAttribute("aria-selected", "false");
       });
       btn.classList.add("active", "text-on-primary", "bg-primary");
       btn.classList.remove("text-body", "hover:text-ink", "hover:bg-canvas");
+      btn.setAttribute("aria-selected", "true");
 
       // Update panel visibility
       tabPanels.forEach((panel) => {
         panel.classList.add("hidden");
       });
-      document.getElementById(`tab-${targetTab}`)?.classList.remove("hidden");
+      const activePanel = document.getElementById(`tab-${targetTab}`);
+      if (activePanel) {
+        activePanel.classList.remove("hidden");
+      }
     });
   });
 
@@ -1463,8 +1476,8 @@ import {
       ];
       profileDayBorn.textContent = daysOfWeek[activeBirthDate.getDay()];
 
-      profileZodiacSymbol.textContent = zodiac.symbol;
-      profileZodiacName.textContent = zodiac.name;
+      profileZodiacSymbol.textContent = `${zodiac.symbol} ${zodiac.name}`;
+      profileZodiacName.classList.add("hidden");
 
       profileChineseSymbol.textContent = chineseZ.symbol;
       profileChineseName.textContent = chineseZ.name;
@@ -1497,7 +1510,7 @@ import {
       : "Today!";
     shareCardProgressEl.textContent = `${life.completionPercent}%`;
     shareCardGenerationEl.textContent = getGenerationLabel(activeBirthDate.getFullYear());
-    shareCardZodiacEl.textContent = zodiac.symbol;
+    shareCardZodiacEl.textContent = `${zodiac.name} ${zodiac.symbol}`;
   }
 
   function renderComparisonCards(cards: any[], container: HTMLElement) {
@@ -1667,6 +1680,20 @@ import {
 
       milestonesTimeline.appendChild(itemNode);
     });
+
+    // End-cap node after the last milestone
+    const endNode = document.createElement("div");
+    endNode.className = "relative animate-fade-in";
+    endNode.innerHTML = `
+      <div class="absolute -left-[29px] md:-left-[37px] top-1.5 w-4 h-4 md:w-6 md:h-6 rounded-full bg-canvas border border-dashed border-hairline-strong flex items-center justify-center text-mute">
+        <span class="font-mono text-[9px] font-bold">∞</span>
+      </div>
+      <div class="ml-4 md:ml-6 border border-dashed border-hairline rounded-sm p-4 bg-canvas-soft">
+        <h4 class="text-sm font-semibold text-body leading-tight">Life continues…</h4>
+        <p class="text-[11px] text-mute mt-0.5">Beyond 100 years</p>
+      </div>
+    `;
+    milestonesTimeline.appendChild(endNode);
   }
 
   // 8. Copy Summary text to clipboard
@@ -1858,7 +1885,7 @@ import {
     // Bottom stats row
     const bdayStr = nextBDay.daysRemaining > 0 ? `${nextBDay.daysRemaining}d` : "Today!";
     const lifeStr = `${life.completionPercent}%`;
-    const zodiacStr = zodiac.symbol;
+    const zodiacStr = `${zodiac.name} ${zodiac.symbol}`;
 
     ctx.fillStyle = muteColor;
     ctx.font = "12px monospace";

@@ -684,157 +684,71 @@ export function calculateHistoricalContext(
   birthDate: Date,
   now: Date,
 ): HistoricalContextCard[] {
-  // Timeline events (approx years/dates), deterministic.
   const events: Array<{
     id: string;
     title: string;
     year: number;
     description: string;
   }> = [
-      // Internet milestones
-      {
-        id: "internet-essentials",
-        title: "Internet enters everyday life",
-        year: 1995,
-        description: "Dial-up era accelerates and web browsing goes mainstream.",
-      },
-      {
-        id: "google-launch",
-        title: "Google becomes a search default",
-        year: 1998,
-        description: "Search quality improves and the web gets indexed at scale.",
-      },
-      // Smartphone era
-      {
-        id: "smartphone-era",
-        title: "Smartphone era deepens",
-        year: 2007,
-        description: "Modern smartphones reshape communication and media.",
-      },
-      // Social media launches
-      {
-        id: "facebook-launch",
-        title: "Social networking expands",
-        year: 2004,
-        description: "Platforms turn browsing into social connection.",
-      },
-      {
-        id: "youtube-launch",
-        title: "Video-sharing becomes global",
-        year: 2005,
-        description: "Online video shifts from niche to mainstream.",
-      },
-      {
-        id: "instagram-launch",
-        title: "Photo-first social media rises",
-        year: 2010,
-        description: "Visual sharing becomes a daily habit.",
-      },
-      {
-        id: "whatsapp-launch",
-        title: "Messaging goes mobile",
-        year: 2009,
-        description: "Chat turns into an always-on communication layer.",
-      },
-      {
-        id: "tiktok-launch",
-        title: "Short-form video takes over feeds",
-        year: 2016,
-        description: "Algorithmic discovery boosts creativity at speed.",
-      },
-      // AI milestones
-      {
-        id: "ai-research-catchup",
-        title: "Generative AI era accelerates",
-        year: 2017,
-        description: "Transformers and modern architectures unlock new capabilities.",
-      },
-      {
-        id: "chatgpt-launch",
-        title: "Chatbots become conversational",
-        year: 2022,
-        description: "AI assistants turn demos into tools for everyday users.",
-      },
-      // Technology milestones (iPhone era requested)
-      {
-        id: "iphone-era",
-        title: "The iPhone experience reshapes tech",
-        year: 2007,
-        description: "Touch-first design and app ecosystems spread quickly.",
-      },
+      // 1900s–1910s
+      { id: "h-wright", title: "Wright brothers' first flight", year: 1903, description: "The first powered, controlled airplane flight at Kitty Hawk." },
+      { id: "h-titanic", title: "Titanic sinks on maiden voyage", year: 1912, description: "Over 1,500 lives lost in the North Atlantic." },
+      { id: "h-ww1", title: "World War I begins", year: 1914, description: "The Great War reshapes global borders and alliances." },
+      { id: "h-womens-suffrage", title: "Women's suffrage in the US", year: 1920, description: "The 19th Amendment grants women the right to vote." },
+      { id: "h-tv-demo", title: "First television demonstration", year: 1927, description: "Philo Farnsworth transmits the first electronic TV image." },
+      { id: "h-great-depression", title: "Great Depression begins", year: 1929, description: "Stock market crash triggers a decade-long economic slump." },
+      // 1940s
+      { id: "h-ww2-end", title: "World War II ends", year: 1945, description: "Allied victory in Europe and the Pacific concludes the deadliest conflict." },
+      { id: "h-un-charter", title: "United Nations founded", year: 1945, description: "International body established to promote peace and cooperation." },
+      { id: "h-transistor", title: "Transistor invented", year: 1947, description: "Bell Labs creates the foundation for modern electronics." },
+      // 1950s
+      { id: "h-space-race", title: "Space Race begins", year: 1957, description: "Sputnik 1, the first artificial satellite, orbits Earth." },
+      { id: "h-dna", title: "DNA double helix discovered", year: 1953, description: "Watson, Crick, and Franklin unlock the structure of life." },
+      { id: "h-civil-rights", title: "Civil Rights Act passed", year: 1964, description: "Landmark US legislation outlaws discrimination." },
+      { id: "h-moon-landing", title: "Apollo 11 Moon landing", year: 1969, description: "Two humans walk on the lunar surface for the first time." },
+      // 1970s
+      { id: "h-microprocessor", title: "First microprocessor (Intel 4004)", year: 1971, description: "The integrated CPU kickstarts the personal computing era." },
+      { id: "h-email", title: "First email sent", year: 1971, description: "Ray Tomlinson sends the first electronic message across ARPANET." },
+      { id: "h-fallback", title: "Fall of the Berlin Wall", year: 1989, description: "The symbolic end of the Cold War division in Europe." },
+      { id: "h-www", title: "World Wide Web invented", year: 1989, description: "Tim Berners-Lee creates the web at CERN." },
+      // 1990s
+      { id: "h-mosaic", title: "Mosaic browser released", year: 1993, description: "The first popular graphical web browser opens the web to the public." },
+      { id: "h-netscape-ipo", title: "Dot-com boom begins", year: 1995, description: "Netscape's IPO ignites the internet gold rush." },
+      { id: "h-google-founded", title: "Google founded", year: 1998, description: "Search quality improves and the web gets indexed at scale." },
+      { id: "h-y2k", title: "Y2K bug passes", year: 2000, description: "The new millennium arrives without widespread computer failures." },
+      // 2000s
+      { id: "h-facebook", title: "Facebook launches", year: 2004, description: "Social graphs and the era of online communities begin." },
+      { id: "h-youtube", title: "YouTube goes live", year: 2005, description: "Video publishing + discovery becomes global." },
+      { id: "h-iphone", title: "iPhone announced", year: 2007, description: "Touch-first design and app ecosystems reshape technology." },
+      { id: "h-bitcoin", title: "Bitcoin whitepaper published", year: 2008, description: "Decentralized digital currency is introduced." },
+      // 2010s
+      { id: "h-instagram", title: "Instagram launches", year: 2010, description: "Photo and creator culture becomes mainstream." },
+      { id: "h-ai-breakthrough", title: "Transformer AI architecture unveiled", year: 2017, description: "The foundation for modern generative AI is laid." },
+      { id: "h-covid", title: "Global COVID-19 pandemic", year: 2020, description: "The world grapples with a once-in-a-century health crisis." },
+      { id: "h-chatgpt", title: "ChatGPT launches", year: 2022, description: "Conversational AI reaches the mass market." },
     ];
 
-  // Entity contextual cards requested
-  const entities: Array<{
-    id: string;
-    title: string;
-    year: number;
-    description: string;
-  }> = [
-      {
-        id: "entity-google",
-        title: "Google",
-        year: 1998,
-        description: "Search, ads, and information systems at web scale.",
-      },
-      {
-        id: "entity-youtube",
-        title: "YouTube",
-        year: 2005,
-        description: "Video publishing + discovery communities.",
-      },
-      {
-        id: "entity-facebook",
-        title: "Facebook",
-        year: 2004,
-        description: "Social graphs and the era of online communities.",
-      },
-      {
-        id: "entity-instagram",
-        title: "Instagram",
-        year: 2010,
-        description: "Photo and creator culture becomes mainstream.",
-      },
-      {
-        id: "entity-whatsapp",
-        title: "WhatsApp",
-        year: 2009,
-        description: "Private messaging on mobile.",
-      },
-      {
-        id: "entity-tiktok",
-        title: "TikTok",
-        year: 2016,
-        description: "Short-form video and algorithmic entertainment.",
-      },
-      {
-        id: "entity-chatgpt",
-        title: "ChatGPT",
-        year: 2022,
-        description: "Conversational AI for writing, learning, and planning.",
-      },
-      {
-        id: "entity-iphone",
-        title: "iPhone",
-        year: 2007,
-        description: "Touch computing + app ecosystems for the world.",
-      },
-    ];
-
-  const all = [...events, ...entities];
-
-  const filtered = all
-    .map((e) => ({
-      ...e,
-      date: makeReferenceDateFromYear(e.year),
-    }))
+  const filtered = events
+    .map((e) => ({ ...e, date: makeReferenceDateFromYear(e.year) }))
     .filter((e) => e.date.getTime() >= birthDate.getTime() && e.date.getTime() <= now.getTime());
 
-  // Sort by date and cap to keep layout tidy
   filtered.sort((a, b) => a.date.getTime() - b.date.getTime());
-  const capped = filtered.slice(-12);
 
-  return capped.map((e) => ({
+  // Evenly spaced selection: pick up to 12 events spread across the user's lifetime
+  const maxCards = 12;
+  let selected: typeof filtered;
+  if (filtered.length <= maxCards) {
+    selected = filtered;
+  } else {
+    selected = [];
+    const step = (filtered.length - 1) / (maxCards - 1);
+    for (let i = 0; i < maxCards; i++) {
+      const idx = Math.round(i * step);
+      selected.push(filtered[idx]);
+    }
+  }
+
+  return selected.map((e) => ({
     id: e.id,
     title: e.title,
     date: e.date,
@@ -843,13 +757,13 @@ export function calculateHistoricalContext(
 }
 
 export function getGenerationLabel(birthYear: number): string {
-  if (birthYear >= 2013) return "Gen Alpha";
-  if (birthYear >= 1997) return "Gen Z";
-  if (birthYear >= 1981) return "Millennial";
-  if (birthYear >= 1965) return "Gen X";
-  if (birthYear >= 1946) return "Boomer";
-  if (birthYear >= 1928) return "Silent";
-  return "Greatest";
+  if (birthYear >= 2013) return "Gen Alpha";   // Pew: 2013–present
+  if (birthYear >= 1997) return "Gen Z";       // Pew: 1997–2012
+  if (birthYear >= 1981) return "Millennial";  // Pew: 1981–1996
+  if (birthYear >= 1965) return "Gen X";       // Pew: 1965–1980
+  if (birthYear >= 1946) return "Boomer";      // Pew: 1946–1964
+  if (birthYear >= 1928) return "Silent";      // Pew: 1928–1945
+  return "Greatest";                            // Pew: 1901–1927
 }
 
 export interface BornInSnapshot {
@@ -900,7 +814,7 @@ export function calculateBornInSnapshot(birthDate: Date): BornInSnapshot {
     1988: ["First transatlantic fiber-optic cable", "NASA resumes space shuttle flights after Challenger"],
     1987: ["World population reaches 5 billion", "First Nintendo Entertainment System hits US", "Black Monday stock market crash"],
     1986: ["Space Shuttle Challenger disaster", "Chernobyl nuclear disaster", "Oprah Winfrey Show goes national"],
-    1985: ["Bitcoin whitepaper published — wait, that's later", "Live Aid concert raises millions for famine relief", "Microsoft Windows 1.0 released"],
+     1985: ["Live Aid concert raises millions for famine relief", "Microsoft Windows 1.0 released", "Discovery of the Titanic wreck"],
     1984: ["Apple Macintosh launched", "First commercial cell phone (Motorola DynaTAC)", "Circle K fuel station brand established"],
     1983: ["Internet Protocol (TCP/IP) established", "First mobile phone call (Motorola DynaTAC)", "CD players go on sale"],
     1982: ["First artificial heart transplant", "Time names 'The Computer' Machine of the Year", "CD players introduced"],

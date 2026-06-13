@@ -77,6 +77,21 @@ body {
   --color-highlight-pink: #ff5aa8;
 }
 
+/* Fix native date picker icon visibility — light mode gets dark icon, dark mode gets light icon */
+input[type="date"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Responsive safe-guards: prevent horizontal overflow */
+img, svg, canvas, video {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Custom visual styles */
 .mesh-gradient-bg {
   position: absolute;
