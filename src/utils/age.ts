@@ -42,16 +42,15 @@ export interface ChineseZodiacInfo {
 export interface Milestone {
   label: string;
   targetValue: number;
-  unit: "days" | "years";
+  unit: "years";
   date: Date;
   isPast: boolean;
-  daysDifference: number; // positive for future, negative for past
+  daysDifference: number;
 }
 
 export interface InteractiveStats {
   heartbeats: number;
   breaths: number;
-  moonOrbits: number;
   solarTravelKm: number;
 }
 
@@ -361,33 +360,15 @@ export function getChineseZodiac(year: number): ChineseZodiacInfo {
 
 /**
  * Compiles a sorted timeline list of life milestones.
+ * Focuses on meaningful life landmarks rather than duplicate day counts.
  */
 export function calculateMilestones(birthDate: Date, now: Date): Milestone[] {
-  const dayMilestones = [1000, 5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000];
-  // Phase 3: ensure age milestone includes 25
+  // Year milestones focus on meaningful life landmarks (ages)
   const yearMilestones = [10, 18, 20, 21, 25, 30, 40, 50, 60, 70, 80, 90, 100];
-
 
   const milestones: Milestone[] = [];
 
-  // Day Milestones
-  for (const days of dayMilestones) {
-    const targetDate = new Date(birthDate.getTime() + days * 24 * 60 * 60 * 1000);
-    const isPast = now.getTime() >= targetDate.getTime();
-    const diffMs = targetDate.getTime() - now.getTime();
-    const daysDifference = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    milestones.push({
-      label: `${days.toLocaleString()} Days Lived`,
-      targetValue: days,
-      unit: "days",
-      date: targetDate,
-      isPast,
-      daysDifference
-    });
-  }
-
-  // Year Milestones
+  // Year Milestones - meaningful life landmarks
   for (const years of yearMilestones) {
     const targetDate = new Date(
       birthDate.getFullYear() + years,
@@ -426,12 +407,7 @@ export interface PlanetaryAgeInfo {
 }
 
 export interface LifeStatisticsInfo {
-  weekendsLived: number;
   leapYearsWitnessed: number;
-
-  olympicsSeen: number;
-  worldCupsSeen: number;
-
   moonCyclesCompleted: number;
   earthOrbitsCompleted: number;
 }
@@ -470,10 +446,7 @@ export function calculateLifeStatistics(
   // If input is inverted, return zeros (no time lived yet).
   if (nowMs <= birthMs) {
     return {
-      weekendsLived: 0,
       leapYearsWitnessed: 0,
-      olympicsSeen: 0,
-      worldCupsSeen: 0,
       moonCyclesCompleted: 0,
       earthOrbitsCompleted: 0,
     };
@@ -482,90 +455,31 @@ export function calculateLifeStatistics(
   const dayMs = 1000 * 60 * 60 * 24;
   const totalDaysLived = Math.floor((nowMs - birthMs) / dayMs);
 
-  // --- Weekends lived (Sat/Sun) ---
-  // Count day boundaries from birth date day to now day, local-time based.
-  let weekendsLived = 0;
-  const cursor = new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-  for (let i = 0; i <= totalDaysLived; i++) {
-    const dow = cursor.getDay(); // 0=Sun, 6=Sat
-    if (dow === 0 || dow === 6) weekendsLived++;
-
-    cursor.setDate(cursor.getDate() + 1);
-  }
-
   // --- Leap years witnessed ---
-  // Count leap years that have at least one moment overlapping (birth..now).
   const leapYearsWitnessed = (() => {
     const startY = birthDate.getFullYear();
     const endY = now.getFullYear();
     let count = 0;
-
     for (let y = startY; y <= endY; y++) {
-      const isLeap =
-        (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
-
+      const isLeap = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
       if (!isLeap) continue;
-
-      // Leap day window: Feb 29 at start of day to end of day
-      const leapStart = new Date(y, 1, 29, 0, 0, 0).getTime(); // monthIndex 1 = Feb
+      const leapStart = new Date(y, 1, 29, 0, 0, 0).getTime();
       const leapEnd = new Date(y, 1, 29, 23, 59, 59, 999).getTime();
-
-      // Overlap if [birth..now] intersects [leapDay..leapDayEnd]
       if (birthMs <= leapEnd && nowMs >= leapStart) count++;
-    }
-
-    return count;
-  })();
-
-  // --- Olympics seen (Summer Olympics, approx every 4 years) ---
-  // Starting 1896 (common convention). This is approximate.
-  const olympicsSeen = (() => {
-    const startYear = 1896;
-    const bY = birthDate.getFullYear();
-    const nY = now.getFullYear();
-
-    let count = 0;
-    for (let y = startYear; y <= nY; y += 4) {
-      if (y < bY) continue;
-      // Use year overlap approximation: if the event year is within the lifetime span
-      // (This intentionally stays simple and local/offline.)
-      if (y >= bY) count++;
-    }
-    return count;
-  })();
-
-  // --- World Cups seen (FIFA Men's World Cup, approx every 4 years from 1930) ---
-  // Approximate and ignores real schedule irregularities/cancellations.
-  const worldCupsSeen = (() => {
-    const startYear = 1930;
-    const bY = birthDate.getFullYear();
-    const nY = now.getFullYear();
-
-    let count = 0;
-    for (let y = startYear; y <= nY; y += 4) {
-      if (y < bY) continue;
-      if (y >= bY) count++;
     }
     return count;
   })();
 
   // --- Moon cycles completed (synodic month) ---
-  const synodicMonthDays = 29.530588; // average
-  const moonCyclesCompleted = Math.floor(
-    totalDaysLived / synodicMonthDays,
-  );
+  const synodicMonthDays = 29.530588;
+  const moonCyclesCompleted = Math.floor(totalDaysLived / synodicMonthDays);
 
   // --- Earth orbits completed (tropical year) ---
   const earthOrbitDays = 365.25636;
-  const earthOrbitsCompleted = Math.floor(
-    totalDaysLived / earthOrbitDays,
-  );
+  const earthOrbitsCompleted = Math.floor(totalDaysLived / earthOrbitDays);
 
   return {
-    weekendsLived,
     leapYearsWitnessed,
-    olympicsSeen,
-    worldCupsSeen,
     moonCyclesCompleted,
     earthOrbitsCompleted,
   };
@@ -645,15 +559,12 @@ export function calculateStats(birthDate: Date, now: Date): InteractiveStats {
   const heartbeats = Math.floor(minutes * 80);
   // Breaths: avg 16 breaths per minute
   const breaths = Math.floor(minutes * 16);
-  // Moon orbits: orbital period is 27.3 days
-  const moonOrbits = Number((days / 27.3).toFixed(2));
   // Solar travel: Earth orbits the Sun at ~29.78 km/s
   const solarTravelKm = Math.floor(seconds * 29.78);
 
   return {
     heartbeats,
     breaths,
-    moonOrbits,
     solarTravelKm,
   };
 }
@@ -680,19 +591,6 @@ const clampNonNegativeInt = (n: number) => {
   if (!Number.isFinite(n)) return 0;
   return Math.max(0, Math.floor(n));
 };
-
-function safeAddYearsClamped(base: Date, years: number): Date {
-  const y = base.getFullYear() + years;
-  // Keep month/day where possible; JS will roll invalid dates.
-  return new Date(
-    y,
-    base.getMonth(),
-    base.getDate(),
-    base.getHours(),
-    base.getMinutes(),
-    base.getSeconds(),
-  );
-}
 
 function makeReferenceDateFromYear(year: number): Date {
   // Deterministic: choose a stable reference month/day/time.
@@ -744,16 +642,10 @@ export function calculateAgeComparisonCards(
 
   const result: AgeComparisonCard[] = [];
 
-  const myAge = calculateExactAge(birthDate, now);
-
   for (const r of refs) {
     const refDate = makeReferenceDateFromYear(r.year);
-    const refAge = calculateExactAge(refDate, now);
-
-    // Compute diff by converting refAge back to a relative date isn't available.
-    // Instead compare on total elapsed days approx.
-    const myDays = calculateTotalUnits(birthDate, now).days;
     const refDays = calculateTotalUnits(refDate, now).days;
+    const myDays = calculateTotalUnits(birthDate, now).days;
 
     const diffDays = Math.abs(myDays - refDays);
     const diffAgeApprox: ExactAge = {
@@ -777,29 +669,6 @@ export function calculateAgeComparisonCards(
       subtitle: youAreOlder ? "Living on a longer timeline." : "Still catching up in the calendar.",
     });
   }
-
-  // Extra cards requested
-  // Olympic witness / World Cups witness
-  const lifeStats = calculateLifeStatistics(birthDate, now);
-  result.push({
-    id: "cmp-olympics",
-    title: `You have witnessed ${lifeStats.olympicsSeen} Olympic Games`,
-    kind: "witnessed",
-    valueText: "(Approximate, local calculation)",
-  });
-  result.push({
-    id: "cmp-worldcups",
-    title: `You have witnessed ${lifeStats.worldCupsSeen} FIFA World Cups`,
-    kind: "witnessed",
-    valueText: "(Approximate, local calculation)",
-  });
-
-  result.push({
-    id: "cmp-leapyears",
-    title: `You have lived through ${lifeStats.leapYearsWitnessed} leap years`,
-    kind: "leapYearsLived",
-    valueText: "(Counted across your birth→now interval)",
-  });
 
   return result;
 }
@@ -973,145 +842,108 @@ export function calculateHistoricalContext(
   }));
 }
 
-export interface LifeBadge {
-  id: string;
-  title: string;
-  unlocked: boolean;
-  valueText: string;
+export function getGenerationLabel(birthYear: number): string {
+  if (birthYear >= 2013) return "Gen Alpha";
+  if (birthYear >= 1997) return "Gen Z";
+  if (birthYear >= 1981) return "Millennial";
+  if (birthYear >= 1965) return "Gen X";
+  if (birthYear >= 1946) return "Boomer";
+  if (birthYear >= 1928) return "Silent";
+  return "Greatest";
 }
 
-export function calculateAchievementBadges(
-  birthDate: Date,
-  now: Date,
-): LifeBadge[] {
-  const days = calculateTotalUnits(birthDate, now).days;
-  const lifeStats = calculateLifeStatistics(birthDate, now);
-
-  const badges: Array<{
-    id: string;
-    title: string;
-    unlocked: boolean;
-    valueText: string;
-  }> = [
-      {
-        id: "badge-1000",
-        title: "1,000 Days Survivor",
-        unlocked: days >= 1000,
-        valueText: `${Math.max(0, Math.floor(days))} days lived`,
-      },
-      {
-        id: "badge-5000",
-        title: "5,000 Days Survivor",
-        unlocked: days >= 5000,
-        valueText: `${Math.max(0, Math.floor(days))} days lived`,
-      },
-      {
-        id: "badge-10000",
-        title: "10,000 Days Survivor",
-        unlocked: days >= 10000,
-        valueText: `${Math.max(0, Math.floor(days))} days lived`,
-      },
-      {
-        id: "badge-weekend",
-        title: "Weekend Veteran",
-        unlocked: lifeStats.weekendsLived >= 50,
-        valueText: `${lifeStats.weekendsLived} weekends`,
-      },
-      {
-        id: "badge-olympics",
-        title: "Olympic Witness",
-        unlocked: lifeStats.olympicsSeen >= 1,
-        valueText: `${lifeStats.olympicsSeen} Olympics`,
-      },
-      {
-        id: "badge-leap",
-        title: "Leap Year Witness",
-        unlocked: lifeStats.leapYearsWitnessed >= 1,
-        valueText: `${lifeStats.leapYearsWitnessed} leap years`,
-      },
-      {
-        id: "badge-moon",
-        title: "Moon Cycle Master",
-        unlocked: lifeStats.moonCyclesCompleted >= 100,
-        valueText: `${lifeStats.moonCyclesCompleted} moon cycles`,
-      },
-      {
-        id: "badge-orbit",
-        title: "Earth Orbit Explorer",
-        unlocked: lifeStats.earthOrbitsCompleted >= 1,
-        valueText: `${lifeStats.earthOrbitsCompleted} Earth orbits`,
-      },
-    ];
-
-  return badges.map((b) => ({
-    id: b.id,
-    title: b.title,
-    unlocked: b.unlocked,
-    valueText: b.valueText,
-  }));
+export interface BornInSnapshot {
+  birthYear: number;
+  generation: string;
+  notableEvents: string[];
 }
 
-export interface PersonalInsightCard {
-  id: string;
-  title: string;
-  description: string;
-  valueText: string;
-}
+export function calculateBornInSnapshot(birthDate: Date): BornInSnapshot {
+  const year = birthDate.getFullYear();
+  const generation = getGenerationLabel(year);
 
-export function calculatePersonalInsights(
-  birthDate: Date,
-  now: Date,
-): PersonalInsightCard[] {
-  const totalDays = calculateTotalUnits(birthDate, now).days;
-  const lifeStats = calculateLifeStatistics(birthDate, now);
+  const notableEvents: Record<number, string[]> = {
+    2022: ["ChatGPT launches — generative AI goes mainstream", "NASA's Artemis I Moon mission launches"],
+    2021: ["COVID-19 vaccines reach global distribution", "James Webb Space Telescope launches"],
+    2020: ["Global COVID-19 pandemic begins", "Joe Biden elected US President"],
+    2019: ["COVID-19 pandemic begins", "First image of a black hole captured"],
+    2018: ["SpaceX Falcon Heavy maiden flight", "GDPR takes effect in Europe"],
+    2017: ["#MeToo movement goes viral", "Total solar eclipse across North America"],
+    2016: ["TikTok launches globally", "AlphaGo beats world Go champion Lee Sedol"],
+    2015: ["Paris Agreement on climate change adopted", "Instagram rolls out algorithmic feed"],
+    2014: ["Ice Bucket Challenge goes viral", "Malaysia Airlines MH370 disappears"],
+    2013: ["Snowden NSA revelations", "Pope Francis elected"],
+    2012: ["Instagram acquired by Facebook for $1B", "Felix Baumgartner jumps from stratosphere"],
+    2011: ["Steve Jobs passes away", "Arab Spring uprisings reshape Middle East"],
+    2010: ["Instagram launches", "iPad launches — the modern tablet era begins"],
+    2009: ["WhatsApp launches", "Bitcoin whitepaper published"],
+    2008: ["Barack Obama elected US President", "iPhone App Store launches"],
+    2007: ["iPhone announced — smartphone era begins", "Amazon Kindle launches"],
+    2006: ["Twitter launches", "Pluto reclassified as dwarf planet"],
+    2005: ["YouTube launches", "Reddit launches"],
+    2004: ["Facebook launches — social media era begins", "Indian Ocean tsunami devastates Southeast Asia"],
+    2003: ["Human Genome Project completed", "Space Shuttle Columbia disaster"],
+    2002: ["Euro becomes physical currency", "An Inconvenient Truth sparks climate debate"],
+    2001: ["Wikipedia launches", "9/11 attacks reshape global politics"],
+    2000: ["Y2K bug passes without major incident", "Human Genome Project draft published"],
+    1999: ["Napster launches — file-sharing era begins", "Euro introduced as virtual currency"],
+    1998: ["Google founded", "iMac G3 signals Apple's comeback"],
+    1997: ["Deep Blue beats Kasparov at chess", "Harry Potter and the Philosopher's Stone published", "Tiger Woods wins first Masters"],
+    1996: ["First DVD players go on sale", "Dolly the sheep cloned"],
+    1995: ["Internet enters everyday life (dial-up era)", "Windows 95 launches with Start Menu", "Java 1.0 released"],
+    1994: ["Netscape Navigator launches", "First online pizza order on PizzaNet"],
+    1993: ["World Wide Web becomes public domain", "Mosaic browser released", "Jurassic Park redefines CGI in film"],
+    1992: ["First SMS text message sent", "Earth Summit in Rio de Janeiro"],
+    1991: ["World Wide Web goes live (first website)", "Soviet Union dissolves", "Linux kernel announced"],
+    1990: ["World Wide Web invented by Tim Berners-Lee", "Hubble Space Telescope launched", "Nelson Mandela freed from prison"],
+    1989: ["Fall of the Berlin Wall", "World Wide Web invented by Tim Berners-Lee", "Exxon Valdez oil spill"],
+    1988: ["First transatlantic fiber-optic cable", "NASA resumes space shuttle flights after Challenger"],
+    1987: ["World population reaches 5 billion", "First Nintendo Entertainment System hits US", "Black Monday stock market crash"],
+    1986: ["Space Shuttle Challenger disaster", "Chernobyl nuclear disaster", "Oprah Winfrey Show goes national"],
+    1985: ["Bitcoin whitepaper published — wait, that's later", "Live Aid concert raises millions for famine relief", "Microsoft Windows 1.0 released"],
+    1984: ["Apple Macintosh launched", "First commercial cell phone (Motorola DynaTAC)", "Circle K fuel station brand established"],
+    1983: ["Internet Protocol (TCP/IP) established", "First mobile phone call (Motorola DynaTAC)", "CD players go on sale"],
+    1982: ["First artificial heart transplant", "Time names 'The Computer' Machine of the Year", "CD players introduced"],
+    1981: ["IBM PC launched — personal computing goes mainstream", "MTV launches (\"Video Killed the Radio Star\")", "First reported cases of AIDS"],
+    1980: ["CNN launches — 24-hour news cycle begins", "Mount St. Helens erupts", "Pac-Man released"],
+    1979: ["Sony Walkman introduced — personal audio revolution", "Margaret Thatcher becomes UK Prime Minister", "Three Mile Island nuclear accident"],
+    1978: ["First test-tube baby (Louise Brown) born", "Star Wars mania sweeps the world"],
+    1977: ["Apple II computer introduced", "Star Wars released (May 25)", "Elvis Presley passes away"],
+    1976: ["Apple Computer founded by Jobs, Wozniak, and Wayne", "Concorde begins commercial supersonic flights"],
+    1975: ["Microsoft founded by Bill Gates and Paul Allen", "Vietnam War ends"],
+    1974: ["Rubik's Cube invented", "Nixon resigns as US President", "Dungeons & Dragons published"],
+    1973: ["First mobile phone call (Martin Cooper, Motorola)", "Oil crisis reshapes global economy", "Skylab space station launched"],
+    1972: ["Last Apollo Moon mission (Apollo 17)", "Pong released — video game industry begins", "Watergate scandal begins"],
+    1971: ["Intel 4004 — first microprocessor released", "Greenpeace founded", "Walt Disney World opens"],
+    1970: ["Earth Day first celebrated", "Apollo 13 mission (\"Houston, we have a problem\")"],
+    1969: ["Apollo 11 Moon landing (July 20)", "Woodstock music festival", "Internet's precursor (ARPANET) goes live"],
+    1968: ["Martin Luther King Jr. and Robert F. Kennedy assassinated", "Intel founded", "Apollo 8 orbits the Moon"],
+    1967: ["First heart transplant (Dr. Christiaan Barnard)", "Summer of Love in San Francisco", "First Super Bowl (Super Bowl I)"],
+    1966: ["Star Trek original series premieres", "China's Cultural Revolution begins"],
+    1965: ["Medicare established in the US", "Malcolm X assassinated", "The Sound of Music wins Best Picture"],
+    1964: ["Civil Rights Act passed in the US", "Tokyo Summer Olympics (first in Asia)", "Ford Mustang introduced"],
+    1963: ["JFK assassinated in Dallas", "Martin Luther King Jr.'s \"I Have a Dream\" speech", "Beatlemania sweeps the world"],
+    1962: ["Cuban Missile Crisis", "First US orbital flight (John Glenn)", "The Beatles release first single"],
+    1961: ["Yuri Gagarin becomes first human in space", "Bay of Pigs invasion", "Berlin Wall erected"],
+    1960: ["First televised US Presidential debate (Kennedy-Nixon)", "OPEC founded"],
+    1959: ["Alaska and Hawaii become US states", "Xerox 914 — first plain-paper copier"],
+    1958: ["NASA founded", "LEGO brick patented", "Modem invented (Bell 103)"],
+    1957: ["Sputnik 1 — first artificial satellite launched", "Treaty of Rome establishes European Economic Community"],
+    1956: ["First transatlantic telephone cable (TAT-1)", "Elvis Presley's first #1 hit song"],
+    1955: ["Walt Disney's Disneyland opens", "Rosa Parks refuses to give up her bus seat", "Jonas Salk develops polio vaccine"],
+    1954: ["First nuclear submarine (USS Nautilus) commissioned", "Brown v. Board of Education ends school segregation", "Food Stamps program introduced"],
+    1953: ["DNA double helix structure discovered (Watson & Crick)", "Mount Everest first conquered (Hillary & Tenzing)", "Queen Elizabeth II crowned"],
+    1952: ["First commercial jet (de Havilland Comet) enters service", "Dwight D. Eisenhower elected US President"],
+    1951: ["First commercial computer (UNIVAC I) delivered", "Color television introduced commercially"],
+    1950: ["First modern credit card (Diners Club) launched", "Korean War begins"],
+  };
 
-  // Deterministic approximations
-  const sleepHoursPerDay = 8;
-  const sunrisesPerDay = 1;
-  const seasonsPerYear = 4;
+  const events = notableEvents[year] ?? [];
 
-  const fullMoons = clampNonNegativeInt(
-    totalDays / 29.530588,
-  );
-
-  const earthTrips = lifeStats.earthOrbitsCompleted;
-
-  const sleepYears = totalDays * sleepHoursPerDay / 24 / 365.25;
-
-  const seasonsLived = (totalDays / 365.25) * seasonsPerYear;
-
-  return [
-    {
-      id: "ins-sleep",
-      title: "Sleep Time",
-      valueText: `${sleepYears.toFixed(1)} years`,
-      description: "Approximate time spent sleeping (8h/day assumption).",
-    },
-    {
-      id: "ins-sunrises",
-      title: "Sunrises Experienced",
-      valueText: `${clampNonNegativeInt(totalDays).toLocaleString()}`,
-      description: "One sunrise per day (local calendar).",
-    },
-    {
-      id: "ins-seasons",
-      title: "Seasons Lived",
-      valueText: `${Math.floor(seasonsLived).toLocaleString()}`,
-      description: "4 seasons per year approximation.",
-    },
-    {
-      id: "ins-moons",
-      title: "Full Moons",
-      valueText: `${fullMoons.toLocaleString()}`,
-      description: "Counted using average lunar cycle length.",
-    },
-    {
-      id: "ins-trips",
-      title: "Earth Trips Around the Sun",
-      valueText: `${earthTrips.toLocaleString()}`,
-      description: "Earth orbits completed (approximate).",
-
-    },
-  ];
+  return {
+    birthYear: year,
+    generation,
+    notableEvents: events.slice(0, 3),
+  };
 }
 

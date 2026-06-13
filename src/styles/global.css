@@ -138,3 +138,115 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ─── Premium Micro-Animations ─── */
+
+/* Staggered card entrance */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-card {
+  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Number count-up transition */
+@keyframes numberPop {
+  0% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-number {
+  animation: numberPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Progress bar fill animation */
+@keyframes fillBar {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-fill-bar {
+  animation: fillBar 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Milestone hover effect */
+.milestone-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.milestone-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-level-3);
+}
+
+/* Share card glass effect */
+.share-card-glass {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(235, 235, 235, 0.5);
+}
+
+[data-theme="dark"] .share-card-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(11, 11, 15, 0.9) 0%,
+    rgba(11, 11, 15, 0.6) 50%,
+    rgba(11, 11, 15, 0.9) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Share card entrance animation */
+@keyframes shareCardReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) rotateX(5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotateX(0);
+  }
+}
+
+.animate-share-card {
+  animation: shareCardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Tab panel entrance stagger */
+.tab-panel-enter {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delay utilities */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.4s; }

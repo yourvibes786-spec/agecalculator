@@ -440,473 +440,238 @@ import {
         <!-- TAB A: OVERVIEW -->
         <div
           id="tab-overview"
-          class="tab-panel w-full grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in"
+          class="tab-panel w-full flex flex-col gap-8 animate-fade-in"
         >
-          <!-- Column 1: Next Birthday Countdown -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
-          >
-            <div>
-              <div class="flex items-center gap-2 mb-4">
+          <!-- Row 1: Next Birthday + Personal Profile (2-col) -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Next Birthday -->
+            <div
+              class="lg:col-span-2 bg-canvas border border-hairline rounded-lg p-6 md:p-8 shadow-level-2 flex flex-col justify-between animate-card"
+            >
+              <div class="flex items-center gap-2 mb-6">
                 <div
                   class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
                 >
-                  <svg
-                    class="w-4.5 h-4.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M21 15.546c0 .58-.33 1.1-.86 1.33L12 21l-8.14-4.124a1.5 1.5 0 01-.86-1.33V6.453c0-.58.33-1.1.86-1.33L12 1l8.14 4.124c.53.23.86.75.86 1.33v9.093z"
-                    ></path>
+                  <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 15.546c0 .58-.33 1.1-.86 1.33L12 21l-8.14-4.124a1.5 1.5 0 01-.86-1.33V6.453c0-.58.33-1.1.86-1.33L12 1l8.14 4.124c.53.23.86.75.86 1.33v9.093z" />
                   </svg>
                 </div>
-                <h3
-                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-                >
-                  Next Birthday
-                </h3>
+                <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Next Birthday</h3>
+                <span class="font-mono text-[10px] text-mute uppercase tracking-widest ml-auto">Countdown</span>
               </div>
 
-              <!-- Countdown Circle Visualizer -->
-              <div class="flex items-center justify-center py-6">
-                <div
-                  class="relative w-40 h-40 flex items-center justify-center"
-                >
-                  <!-- Backgound Circle -->
+              <div class="flex flex-col md:flex-row items-center gap-8">
+                <!-- Countdown Circle -->
+                <div class="relative w-40 h-40 flex items-center justify-center shrink-0">
                   <svg class="absolute inset-0 w-full h-full -rotate-90">
-                    <circle
-                      cx="80"
-                      cy="80"
-                      r="70"
-                      stroke="var(--color-hairline)"
-                      stroke-width="6"
-                      fill="transparent"></circle>
-                    <!-- Progress Circle -->
-                    <circle
-                      id="countdown-progress"
-                      cx="80"
-                      cy="80"
-                      r="70"
-                      stroke="var(--color-primary)"
-                      stroke-width="7"
-                      fill="transparent"
-                      stroke-dasharray="440"
-                      stroke-dashoffset="440"
-                      stroke-linecap="round"
-                      class="transition-all duration-1000 ease-out"></circle>
+                    <circle cx="80" cy="80" r="70" stroke="var(--color-hairline)" stroke-width="6" fill="transparent" />
+                    <circle id="countdown-progress" cx="80" cy="80" r="70" stroke="var(--color-primary)" stroke-width="7" fill="transparent" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round" class="transition-all duration-1000 ease-out" />
                   </svg>
-                  <!-- Value display inside -->
-                  <div
-                    class="flex flex-col items-center justify-center text-center px-4"
-                  >
-                    <span
-                      id="countdown-days"
-                      aria-live="polite"
-                      class="text-3xl font-bold tracking-tight text-ink tabular-nums"
-                      >0</span
-                    >
-                    <span
-                      class="font-mono text-[9px] text-mute font-semibold uppercase tracking-widest mt-0.5"
-                      >Days Left</span
-                    >
+                  <div class="flex flex-col items-center justify-center text-center px-4">
+                    <span id="countdown-days" aria-live="polite" class="text-4xl font-bold tracking-tight text-ink tabular-nums">0</span>
+                    <span class="font-mono text-[9px] text-mute font-semibold uppercase tracking-widest mt-0.5">Days Left</span>
                   </div>
+                </div>
+
+                <!-- Countdown details -->
+                <div class="flex-1 text-center md:text-left">
+                  <p id="countdown-text" aria-live="polite" class="text-sm text-body font-mono mb-3">0 months & 0 days remaining</p>
+                  <div id="countdown-clock" aria-live="polite" class="inline-block text-sm font-mono font-semibold text-primary select-text bg-canvas-soft-2 rounded-sm py-2 px-3 tabular-nums">00:00:00:00</div>
                 </div>
               </div>
             </div>
 
-            <!-- Summary Countdown timer details -->
-            <div class="mt-4 pt-4 border-t border-hairline text-center">
-              <p
-                id="countdown-text"
-                aria-live="polite"
-                class="text-xs text-body font-mono mb-2"
-              >
-                0 months & 0 days remaining
-              </p>
-              <div
-                id="countdown-clock"
-                aria-live="polite"
-                class="text-xs font-mono font-semibold text-primary select-text bg-canvas-soft-2 rounded-sm py-1.5 px-2 tabular-nums"
-              >
-                00:00:00:00
+            <!-- Personal Profile -->
+            <div class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between animate-card stagger-1">
+              <div>
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary">
+                    <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Profile</h3>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between py-1.5 border-b border-hairline">
+                    <span class="text-xs text-body font-medium">Day of Birth</span>
+                    <span id="profile-day-born" class="font-mono text-xs font-semibold text-primary">Unknown</span>
+                  </div>
+                  <div class="flex items-center justify-between py-1.5 border-b border-hairline">
+                    <span class="text-xs text-body font-medium">Zodiac</span>
+                    <span class="flex items-center gap-1.5">
+                      <span id="profile-zodiac-symbol" class="text-sm">♈</span>
+                      <span id="profile-zodiac-name" class="font-sans text-xs font-semibold text-primary">Aries</span>
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between py-1.5">
+                    <span class="text-xs text-body font-medium">Chinese Zodiac</span>
+                    <span class="flex items-center gap-1.5">
+                      <span id="profile-chinese-symbol" class="text-sm">🐀</span>
+                      <span id="profile-chinese-name" class="font-sans text-xs font-semibold text-primary">Rat</span>
+                      <span id="profile-chinese-element" class="font-mono text-[9px] text-mute bg-canvas-soft px-1.5 py-0.5 rounded border border-hairline font-semibold">Metal</span>
+                    </span>
+                  </div>
+                </div>
               </div>
+              <div id="profile-chinese-traits" class="mt-3 p-2.5 bg-canvas-soft border border-hairline rounded-sm font-mono text-[9px] text-mute uppercase tracking-wider leading-relaxed">Traits description</div>
             </div>
           </div>
 
-          <!-- Column 2: Astronomical & Birthday Metadata -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
-          >
-            <div class="space-y-6">
+          <!-- Row 2: Life Progress Dashboard -->
+          <div class="bg-canvas border border-hairline rounded-lg p-6 md:p-8 shadow-level-2 animate-card stagger-2">
+            <div class="flex items-center justify-between gap-2 mb-6">
               <div class="flex items-center gap-2">
-                <div
-                  class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
-                >
-                  <svg
-                    class="w-4.5 h-4.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                <div class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary">
+                  <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3
-                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-                >
-                  Personal Profile
-                </h3>
+                <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Life Progress</h3>
               </div>
+              <span class="font-mono text-[10px] text-mute uppercase tracking-widest">Premium</span>
+            </div>
 
-              <!-- Metrics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Expectancy Input + Remaining -->
               <div class="space-y-4">
-                <!-- Day Born -->
-                <div
-                  class="flex items-center justify-between py-2 border-b border-hairline"
-                >
-                  <span class="text-sm text-body font-medium">Day of Birth</span
-                  >
-                  <span
-                    id="profile-day-born"
-                    class="font-mono text-xs font-semibold text-primary"
-                    >Unknown</span
-                  >
-                </div>
-                <!-- Zodiac -->
-                <div
-                  class="flex items-center justify-between py-2 border-b border-hairline"
-                >
-                  <span class="text-sm text-body font-medium">Zodiac Sign</span>
-                  <span class="flex items-center gap-1.5">
-                    <span id="profile-zodiac-symbol" class="text-sm">♈</span>
-                    <span
-                      id="profile-zodiac-name"
-                      class="font-sans text-sm font-semibold text-primary"
-                      >Aries</span
-                    >
-                    <span
-                      id="profile-zodiac-dates"
-                      class="font-mono text-[10px] text-mute font-semibold"
-                      >Mar 21 - Apr 19</span
-                    >
-                  </span>
-                </div>
-                <!-- Chinese Zodiac -->
-                <div
-                  class="flex items-center justify-between py-2 border-b border-hairline"
-                >
-                  <span class="text-sm text-body font-medium"
-                    >Chinese Zodiac</span
-                  >
-                  <span class="flex items-center gap-1.5">
-                    <span id="profile-chinese-symbol" class="text-sm">🐀</span>
-                    <span
-                      id="profile-chinese-name"
-                      class="font-sans text-sm font-semibold text-primary"
-                      >Rat</span
-                    >
-                    <span
-                      id="profile-chinese-element"
-                      class="font-mono text-[10px] text-mute bg-canvas-soft px-1.5 py-0.5 rounded border border-hairline font-semibold"
-                      >Metal</span
-                    >
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Chinese traits summary -->
-            <div
-              id="profile-chinese-traits"
-              class="mt-4 p-3 bg-canvas-soft border border-hairline rounded-sm font-mono text-[10px] text-mute uppercase tracking-wider leading-relaxed"
-            >
-              Traits description
-            </div>
-
-            <!-- Life Progress Dashboard (V2) -->
-            <div
-              class="mt-6 bg-canvas-soft border border-hairline rounded-lg p-4 shadow-level-1"
-            >
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <h4
-                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-                >
-                  Life Progress
-                </h4>
-                <span
-                  class="font-mono text-[10px] text-mute uppercase tracking-widest"
-                >
-                  Premium
-                </span>
-              </div>
-
-              <div class="space-y-3">
                 <div class="flex items-center justify-between gap-3">
-                  <label
-                    for="life-expectancy-years"
-                    class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
-                  >
-                    Life Expectancy (Years)
-                  </label>
-                  <input
-                    type="number"
-                    id="life-expectancy-years"
-                    min="1"
-                    max="130"
-                    step="1"
-                    inputmode="numeric"
-                    class="w-20 h-9 px-3 bg-canvas text-ink border border-hairline focus-ring rounded-sm text-sm font-mono"
-                  />
+                  <label for="life-expectancy-years" class="text-xs text-body font-mono font-semibold uppercase tracking-wider">Life Expectancy</label>
+                  <input type="number" id="life-expectancy-years" min="1" max="130" step="1" inputmode="numeric" class="w-20 h-9 px-3 bg-canvas text-ink border border-hairline focus-ring rounded-sm text-sm font-mono" />
                 </div>
-
                 <div class="grid grid-cols-3 gap-3">
-                  <div class="text-center">
-                    <span
-                      id="life-years-remaining"
-                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                      >0</span
-                    >
-                    <div
-                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
-                    >
-                      Years
-                    </div>
+                  <div class="text-center bg-canvas-soft border border-hairline rounded-lg p-3">
+                    <span id="life-years-remaining" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+                    <div class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5">Years</div>
                   </div>
-                  <div class="text-center">
-                    <span
-                      id="life-months-remaining"
-                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                      >0</span
-                    >
-                    <div
-                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
-                    >
-                      Months
-                    </div>
+                  <div class="text-center bg-canvas-soft border border-hairline rounded-lg p-3">
+                    <span id="life-months-remaining" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+                    <div class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5">Months</div>
                   </div>
-                  <div class="text-center">
-                    <span
-                      id="life-weeks-remaining"
-                      class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                      >0</span
-                    >
-                    <div
-                      class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5"
-                    >
-                      Weeks
-                    </div>
+                  <div class="text-center bg-canvas-soft border border-hairline rounded-lg p-3">
+                    <span id="life-weeks-remaining" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+                    <div class="text-[10px] text-body font-mono font-semibold uppercase tracking-wider mt-0.5">Weeks</div>
                   </div>
                 </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-body font-mono font-semibold uppercase tracking-wider">Days</span>
+                  <span id="life-days-remaining" class="text-xs text-link font-mono font-semibold tabular-nums">0</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-mute font-mono uppercase tracking-wider">Remaining</span>
+                  <span id="life-remaining-percent" class="text-[10px] text-mute font-mono tabular-nums">0%</span>
+                </div>
+              </div>
 
-                <div class="grid grid-cols-1 gap-3 mt-3">
-                  <div class="flex items-center justify-between gap-3">
-                    <span
-                      class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
-                      >Days</span
-                    >
-                    <span
-                      id="life-days-remaining"
-                      class="text-xs text-link font-mono font-semibold tabular-nums"
-                      >0</span
-                    >
+              <!-- Progress Bar + Target -->
+              <div class="lg:col-span-2 space-y-4">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs text-body font-mono font-semibold uppercase tracking-wider">Progress</span>
+                    <span id="life-completion-percent" class="text-xs text-link font-mono font-semibold tabular-nums">0%</span>
                   </div>
-                  <div class="flex items-center justify-between">
-                    <span
-                      class="text-[10px] text-mute font-mono uppercase tracking-wider"
-                      >Remaining</span
-                    >
-                    <span
-                      id="life-remaining-percent"
-                      class="text-[10px] text-mute font-mono tabular-nums"
-                      >0%</span
-                    >
+                  <div class="w-full h-3 bg-canvas-soft border border-hairline rounded-sm overflow-hidden">
+                    <div id="life-completion-bar" class="h-full bg-link rounded-sm animate-fill-bar" style="width:0%"></div>
                   </div>
-
-                  <div class="pt-2">
-                    <div class="flex items-center justify-between mb-1">
-                      <span
-                        class="text-xs text-body font-mono font-semibold uppercase tracking-wider"
-                        >Progress</span
-                      >
-                      <span
-                        id="life-completion-percent"
-                        class="text-xs text-link font-mono font-semibold tabular-nums"
-                        >0%</span
-                      >
-                    </div>
-                    <div
-                      class="w-full h-2 bg-canvas-soft border border-hairline rounded-sm overflow-hidden"
-                    >
-                      <div
-                        id="life-completion-bar"
-                        class="h-full bg-link rounded-sm"
-                        style="width:0%"
-                      >
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center justify-between mt-2">
-                    <span
-                      class="text-[10px] text-mute font-mono uppercase tracking-wider"
-                      >Target Date</span
-                    >
-                    <span
-                      id="life-expectancy-date"
-                      class="text-[10px] text-mute font-mono tabular-nums"
-                      >—</span
-                    >
-                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-mute font-mono uppercase tracking-wider">Target Date</span>
+                  <span id="life-expectancy-date" class="text-[10px] text-mute font-mono tabular-nums">—</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Column 3: Share Card & Actions -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex flex-col justify-between"
-          >
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <div
-                  class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary"
-                >
-                  <svg
-                    class="w-4.5 h-4.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.684 10.742l4.636-2.318a3 3 0 11.83 1.666L9.5 12.4a3 3 0 110 3.2l4.647-2.324a3 3 0 11-.83 1.667l-4.647 2.324a3 3 0 11-4.636-3.722L8.684 10.74M15 6.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
-                    ></path>
+          <!-- Row 3: Age Comparison Engine -->
+          <div class="bg-canvas border border-hairline rounded-lg p-6 md:p-8 shadow-level-2 animate-card stagger-3">
+            <div class="flex items-center justify-between gap-2 mb-6">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary">
+                  <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l4.636-2.318a3 3 0 11.83 1.666L9.5 12.4a3 3 0 110 3.2l4.647-2.324a3 3 0 11-.83 1.667l-4.647 2.324a3 3 0 11-4.636-3.722L8.684 10.74M15 6.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                   </svg>
                 </div>
-                <h3
-                  class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-                >
-                  Share Progress
-                </h3>
+                <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Age Comparison</h3>
               </div>
+              <span class="font-mono text-[10px] text-mute uppercase tracking-widest">Premium</span>
+            </div>
+            <div id="comparison-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          </div>
 
-              <!-- Share Preview card -->
-              <div
-                class="relative w-full rounded border border-hairline overflow-hidden p-4 bg-canvas-soft shadow-level-1 aspect-[16/9] flex flex-col justify-between select-none border-dashed mb-4"
-              >
+          <!-- Row 4: Born In Snapshot -->
+          <div id="born-in-container" class="animate-card stagger-4"></div>
+
+          <!-- Row 5: Share Card + Actions -->
+          <div class="bg-canvas border border-hairline rounded-lg p-6 md:p-8 shadow-level-2 animate-card stagger-5">
+            <div class="flex items-center gap-2 mb-6">
+              <div class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary">
+                <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l4.636-2.318a3 3 0 11.83 1.666L9.5 12.4a3 3 0 110 3.2l4.647-2.324a3 3 0 11-.83 1.667l-4.647 2.324a3 3 0 11-4.636-3.722L8.684 10.74M15 6.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm-9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm9 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                </svg>
+              </div>
+              <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Share Progress</h3>
+            </div>
+
+            <!-- Redesigned Share Card -->
+            <div class="relative w-full rounded-xl overflow-hidden mb-6 animate-share-card" id="share-card-preview">
+              <!-- Glass background with gradient mesh -->
+              <div class="share-card-glass">
                 <div class="mesh-gradient-bg absolute inset-0 opacity-60"></div>
-                <div class="relative flex justify-between items-start">
-                  <div>
-                    <span
-                      class="font-mono text-[9px] text-mute uppercase tracking-widest font-semibold block leading-none"
-                      >Age Summary</span
-                    >
-                    <span
-                      id="share-card-date"
-                      class="font-mono text-[8px] text-mute mt-1 block"
-                      >Date</span
-                    >
+                <div class="relative px-6 py-8 md:px-10 md:py-10 min-h-[280px] md:min-h-[320px] flex flex-col justify-between select-none">
+                  <!-- Header -->
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <span class="font-mono text-[9px] text-mute uppercase tracking-widest font-semibold block leading-none">Age Report</span>
+                      <span class="font-mono text-[10px] text-link font-semibold block mt-1" id="share-card-generation">—</span>
+                    </div>
+                    <span class="font-sans font-semibold text-[10px] tracking-tight text-ink">AGE CALCULATOR.</span>
                   </div>
-                  <span
-                    class="font-sans font-semibold text-[10px] tracking-tight text-ink"
-                    >AGE CALCULATOR.</span
-                  >
-                </div>
-                <div class="relative py-2">
-                  <span
-                    id="share-card-age"
-                    class="text-base font-bold text-ink leading-tight tracking-tight block"
-                    >Calculating...</span
-                  >
-                  <span
-                    id="share-card-days"
-                    class="font-mono text-[9px] text-link font-semibold uppercase tracking-wider mt-1 block"
-                    >Calculating...</span
-                  >
-                </div>
-                <div
-                  class="relative flex justify-between items-end border-t border-hairline/50 pt-2 font-mono text-[8px] text-mute"
-                >
-                  <span id="share-card-zodiac">Zodiac</span>
-                  <span>100% local calculation</span>
+
+                  <!-- Hero Age Display -->
+                  <div class="flex-1 flex flex-col justify-center items-center text-center py-4">
+                    <span id="share-card-age" class="text-5xl md:text-7xl font-bold tracking-tight text-ink tabular-nums block leading-none">0</span>
+                    <span class="font-mono text-xs text-body font-semibold uppercase tracking-wider mt-1 block">Years Old</span>
+                    <span id="share-card-days" class="font-mono text-sm text-link font-semibold uppercase tracking-wider mt-2 block">0 Days Lived</span>
+                  </div>
+
+                  <!-- Footer stats -->
+                  <div class="grid grid-cols-3 gap-4 border-t border-hairline/50 pt-4">
+                    <div class="text-center">
+                      <span class="font-mono text-[8px] text-mute uppercase tracking-widest block">Next Birthday</span>
+                      <span id="share-card-countdown" class="text-xs font-bold text-primary tabular-nums block mt-0.5">—</span>
+                    </div>
+                    <div class="text-center">
+                      <span class="font-mono text-[8px] text-mute uppercase tracking-widest block">Life Progress</span>
+                      <span id="share-card-progress" class="text-xs font-bold text-primary tabular-nums block mt-0.5">0%</span>
+                    </div>
+                    <div class="text-center">
+                      <span class="font-mono text-[8px] text-mute uppercase tracking-widest block">Zodiac</span>
+                      <span id="share-card-zodiac" class="text-xs font-bold text-primary block mt-0.5">—</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Action buttons -->
-            <div class="space-y-2">
-              <button
-                type="button"
-                id="copy-summary-btn"
-                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                  ></path>
+            <div class="flex flex-wrap gap-3">
+              <button type="button" id="copy-summary-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                 </svg>
-                <span id="copy-btn-text">Copy Summary Text</span>
+                <span id="copy-btn-text">Copy Summary</span>
               </button>
-
-              <button
-                type="button"
-                id="download-card-btn"
-                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-xs focus-ring transition shadow-level-1 cursor-pointer"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                  ></path>
+              <button type="button" id="download-card-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-xs focus-ring transition shadow-level-1 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download Share Card
+                Download PNG
               </button>
-
-              <button
-                type="button"
-                id="share-web-btn"
-                class="w-full h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-8l-4-4-4 4m4-4v12"
-                  ></path>
+              <button type="button" id="share-web-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-8l-4-4-4 4m4-4v12" />
                 </svg>
-                Share Life Summary
+                Share
               </button>
             </div>
           </div>
@@ -1067,120 +832,6 @@ import {
           id="tab-stats"
           class="tab-panel hidden w-full grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in"
         >
-          <!-- Heartbeats -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
-          >
-            <div
-              class="w-12 h-12 rounded bg-error-soft/30 border border-error-soft text-error flex items-center justify-center shrink-0"
-            >
-              <svg
-                class="w-6 h-6 animate-bounce"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <span
-                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
-                >Total Heartbeats (Est.)</span
-              >
-              <span
-                id="stat-heartbeats"
-                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
-                >0</span
-              >
-              <p class="text-xs text-body leading-relaxed mt-2 select-text">
-                Calculated on an average human resting heart rate of 80 beats
-                per minute (bpm).
-              </p>
-            </div>
-          </div>
-
-          <!-- Breaths -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
-          >
-            <div
-              class="w-12 h-12 rounded bg-cyan-soft/20 border border-cyan-deep/20 text-cyan-deep flex items-center justify-center shrink-0"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <span
-                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
-                >Total Breaths (Est.)</span
-              >
-              <span
-                id="stat-breaths"
-                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
-                >0</span
-              >
-              <p class="text-xs text-body leading-relaxed mt-2 select-text">
-                Calculated on an average human resting breathing rate of 16
-                breaths per minute.
-              </p>
-            </div>
-          </div>
-
-          <!-- Moon Orbits -->
-          <div
-            class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
-          >
-            <div
-              class="w-12 h-12 rounded bg-warning-soft border border-warning-deep/10 text-warning-deep flex items-center justify-center shrink-0"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <span
-                class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
-                >Moon Orbits Lived</span
-              >
-              <span
-                id="stat-moon-orbits"
-                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
-                >0</span
-              >
-              <p class="text-xs text-body leading-relaxed mt-2 select-text">
-                The number of complete orbits the Moon has made around the Earth
-                since your birth (orbit period is roughly 27.3 days).
-              </p>
-            </div>
-          </div>
-
           <!-- Solar Travel -->
           <div
             class="bg-canvas border border-hairline rounded-lg p-6 shadow-level-2 flex items-start gap-4"
@@ -1302,7 +953,7 @@ import {
             </p>
           </div>
 
-          <!-- Life Statistics Dashboard (V2) -->
+          <!-- Life Stats Compact Row -->
           <div
             class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
           >
@@ -1310,7 +961,7 @@ import {
               <h4
                 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
               >
-                Life Statistics Intelligence
+                Life Statistics
               </h4>
               <span
                 class="font-mono text-[10px] text-mute uppercase tracking-widest"
@@ -1318,98 +969,22 @@ import {
               >
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-weekends-lived"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  Weekends lived (Sat/Sun)
-                </p>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
+                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Leap Years</span>
+                <span id="stat-leap-years-witnessed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
 
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-leap-years-witnessed"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  Leap years witnessed
-                </p>
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
+                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Moon Cycles</span>
+                <span id="stat-moon-cycles-completed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
 
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-olympics-seen"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  Olympics seen
-                </p>
-              </div>
-
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-world-cups-seen"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  FIFA World Cups seen
-                </p>
-              </div>
-
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-moon-cycles-completed"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  Moon cycles completed
-                </p>
-              </div>
-
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4">
-                <span
-                  id="stat-earth-orbits-completed"
-                  class="text-2xl font-bold tracking-tight text-ink tabular-nums"
-                  >0</span
-                >
-                <p class="text-xs text-body leading-relaxed mt-1 select-text">
-                  Earth orbits completed
-                </p>
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
+                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Earth Orbits</span>
+                <span id="stat-earth-orbits-completed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
             </div>
-          </div>
-
-          <!-- Phase 3: Age Comparison Engine -->
-          <div
-            class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
-          >
-            <div class="flex items-center justify-between gap-2 mb-4">
-              <h4
-                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-              >
-                Age Comparison Engine
-              </h4>
-              <span
-                class="font-mono text-[10px] text-mute uppercase tracking-widest"
-                >Premium</span
-              >
-            </div>
-            <div
-              id="comparison-cards-container"
-              class="grid grid-cols-1 sm:grid-cols-2 gap-4"
-            >
-            </div>
-            <p class="text-xs text-body leading-relaxed mt-3 select-text">
-              Cards update automatically when your birth date changes.
-            </p>
           </div>
 
           <!-- Phase 3: Historical Context -->
@@ -1434,49 +1009,7 @@ import {
             </div>
           </div>
 
-          <!-- Phase 3: Achievement Badges -->
-          <div
-            class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
-          >
-            <div class="flex items-center justify-between gap-2 mb-4">
-              <h4
-                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-              >
-                Life Achievement Badges
-              </h4>
-              <span
-                class="font-mono text-[10px] text-mute uppercase tracking-widest"
-                >Unlocks</span
-              >
-            </div>
-            <div
-              id="badges-container"
-              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
-            >
-            </div>
-          </div>
 
-          <!-- Phase 3: Personal Insights -->
-          <div
-            class="col-span-1 md:col-span-2 bg-canvas border border-hairline rounded-lg p-6 shadow-level-2"
-          >
-            <div class="flex items-center justify-between gap-2 mb-4">
-              <h4
-                class="text-sm font-semibold text-ink uppercase tracking-wider font-mono"
-              >
-                Personal Insights
-              </h4>
-              <span
-                class="font-mono text-[10px] text-mute uppercase tracking-widest"
-                >Local</span
-              >
-            </div>
-            <div
-              id="personal-insights-container"
-              class="grid grid-cols-1 sm:grid-cols-2 gap-4"
-            >
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -1526,8 +1059,8 @@ import {
     calculateLifeStatistics,
     calculateAgeComparisonCards,
     calculateHistoricalContext,
-    calculateAchievementBadges,
-    calculatePersonalInsights,
+    calculateBornInSnapshot,
+    getGenerationLabel,
   } from "../utils/age";
 
   // Global variables to store the active birthdate
@@ -1567,7 +1100,6 @@ import {
   const profileDayBorn = document.getElementById("profile-day-born")!;
   const profileZodiacSymbol = document.getElementById("profile-zodiac-symbol")!;
   const profileZodiacName = document.getElementById("profile-zodiac-name")!;
-  const profileZodiacDates = document.getElementById("profile-zodiac-dates")!;
   const profileChineseSymbol = document.getElementById(
     "profile-chinese-symbol",
   )!;
@@ -1609,14 +1141,7 @@ import {
   // Milestones timeline
   const milestonesTimeline = document.getElementById("milestones-timeline")!;
 
-  // Fun Stats Elements
-  const statHeartbeats = document.getElementById("stat-heartbeats")!;
-  const statBreaths = document.getElementById("stat-breaths")!;
-  const statMoonOrbits = document.getElementById("stat-moon-orbits")!;
   const statSolarTravel = document.getElementById("stat-solar-travel")!;
-
-  // Life Statistics Intelligence (V2)
-  const statWeekendsLived = document.getElementById("stat-weekends-lived")!;
 
   // Phase 3 containers
   const comparisonCardsContainer = document.getElementById(
@@ -1625,16 +1150,11 @@ import {
   const historicalContextContainer = document.getElementById(
     "historical-context-container",
   )!;
-  const badgesContainer = document.getElementById("badges-container")!;
-  const personalInsightsContainer = document.getElementById(
-    "personal-insights-container",
-  )!;
+  const bornInContainer = document.getElementById("born-in-container")!;
 
   const statLeapYearsWitnessed = document.getElementById(
     "stat-leap-years-witnessed",
   )!;
-  const statOlympicsSeen = document.getElementById("stat-olympics-seen")!;
-  const statWorldCupsSeen = document.getElementById("stat-world-cups-seen")!;
   const statMoonCyclesCompleted = document.getElementById(
     "stat-moon-cycles-completed",
   )!;
@@ -1655,11 +1175,13 @@ import {
   const downloadCardBtn = document.getElementById("download-card-btn")!;
   const shareWebBtn = document.getElementById("share-web-btn")!;
 
-  // Share Card Static DOM elements
-  const shareCardDate = document.getElementById("share-card-date")!;
-  const shareCardAge = document.getElementById("share-card-age")!;
-  const shareCardDays = document.getElementById("share-card-days")!;
-  const shareCardZodiac = document.getElementById("share-card-zodiac")!;
+// Share Card Preview elements
+   const shareCardAge = document.getElementById("share-card-age")!;
+   const shareCardDays = document.getElementById("share-card-days")!;
+   const shareCardCountdown = document.getElementById("share-card-countdown")!;
+   const shareCardProgressEl = document.getElementById("share-card-progress")!;
+   const shareCardGenerationEl = document.getElementById("share-card-generation")!;
+   const shareCardZodiacEl = document.getElementById("share-card-zodiac")!;
 
   // 1. Initial State / LocalStorage loading
   window.addEventListener("DOMContentLoaded", () => {
@@ -1855,19 +1377,11 @@ import {
     minTotal.textContent = totalUnits.minutes.toLocaleString();
     sTotal.textContent = totalUnits.seconds.toLocaleString();
 
-    // Update Cosmic / Biological stats
-    statHeartbeats.textContent = stats.heartbeats.toLocaleString();
-    statBreaths.textContent = stats.breaths.toLocaleString();
-    statMoonOrbits.textContent = stats.moonOrbits.toLocaleString();
     statSolarTravel.textContent = stats.solarTravelKm.toLocaleString();
 
-    // Life Statistics Intelligence (V2)
     const lifeStats = calculateLifeStatistics(activeBirthDate, now);
-    statWeekendsLived.textContent = lifeStats.weekendsLived.toLocaleString();
     statLeapYearsWitnessed.textContent =
       lifeStats.leapYearsWitnessed.toLocaleString();
-    statOlympicsSeen.textContent = lifeStats.olympicsSeen.toLocaleString();
-    statWorldCupsSeen.textContent = lifeStats.worldCupsSeen.toLocaleString();
     statMoonCyclesCompleted.textContent =
       lifeStats.moonCyclesCompleted.toLocaleString();
     statEarthOrbitsCompleted.textContent =
@@ -1951,24 +1465,11 @@ import {
 
       profileZodiacSymbol.textContent = zodiac.symbol;
       profileZodiacName.textContent = zodiac.name;
-      profileZodiacDates.textContent = zodiac.dates;
 
       profileChineseSymbol.textContent = chineseZ.symbol;
       profileChineseName.textContent = chineseZ.name;
       profileChineseElement.textContent = chineseZ.element;
       profileChineseTraits.textContent = `Year of the ${chineseZ.name} (${chineseZ.element}): ${chineseZ.traits}`;
-
-      // Render static share card text preview
-      const dateOptions: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      shareCardDate.textContent = activeBirthDate.toLocaleDateString(
-        "en-US",
-        dateOptions,
-      );
-      shareCardZodiac.textContent = `${zodiac.name} ${zodiac.symbol}  |  ${chineseZ.element} ${chineseZ.name} ${chineseZ.symbol}`;
 
       // Render Milestones Roadmap
       renderMilestonesRoadmap(activeBirthDate, now);
@@ -1982,17 +1483,21 @@ import {
     const historicalContext = calculateHistoricalContext(activeBirthDate, now);
     renderHistoricalContext(historicalContext, historicalContextContainer);
 
-    // Phase 3: Achievement Badges
-    const badges = calculateAchievementBadges(activeBirthDate, now);
-    renderBadges(badges, badgesContainer);
-
-    // Phase 3: Personal Insights
-    const insights = calculatePersonalInsights(activeBirthDate, now);
-    renderPersonalInsights(insights, personalInsightsContainer);
+    // Born In Snapshot
+    if (firstLoad) {
+      const bornIn = calculateBornInSnapshot(activeBirthDate);
+      renderBornInSnapshot(bornIn, bornInContainer);
+    }
 
     // Keep age preview in Share Card updated
-    shareCardAge.textContent = `${age.years}Y, ${age.months}M, ${age.days}D`;
+    shareCardAge.textContent = `${age.years} Years`;
     shareCardDays.textContent = `${totalUnits.days.toLocaleString()} Days Lived`;
+    shareCardCountdown.textContent = nextBDay.daysRemaining > 0
+      ? `${nextBDay.daysRemaining} Days`
+      : "Today!";
+    shareCardProgressEl.textContent = `${life.completionPercent}%`;
+    shareCardGenerationEl.textContent = getGenerationLabel(activeBirthDate.getFullYear());
+    shareCardZodiacEl.textContent = zodiac.symbol;
   }
 
   function renderComparisonCards(cards: any[], container: HTMLElement) {
@@ -2048,47 +1553,37 @@ import {
     }
   }
 
-  function renderBadges(badges: any[], container: HTMLElement) {
+  function renderBornInSnapshot(snapshot: any, container: HTMLElement) {
     container.innerHTML = "";
-    badges.forEach((b) => {
-      const node = document.createElement("div");
-      node.className = b.unlocked
-        ? "bg-canvas-soft border border-link/20 rounded-lg p-4 shadow-level-1"
-        : "bg-canvas-soft/40 border border-hairline rounded-lg p-4 shadow-level-1";
-
-      node.innerHTML = `
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="font-mono text-[10px] uppercase tracking-widest ${b.unlocked ? "text-link" : "text-mute"} font-semibold">${b.unlocked ? "Unlocked" : "Locked"}</div>
-            <h5 class="text-sm font-semibold text-ink mt-1">${b.title}</h5>
-          </div>
-          <div class="w-8 h-8 rounded-sm flex items-center justify-center border ${b.unlocked ? "border-link/30 bg-link/10 text-link" : "border-hairline bg-canvas-soft/30 text-mute"}">
-            ${b.unlocked ? "✓" : "—"}
-          </div>
+    const node = document.createElement("div");
+    node.className = "bg-canvas border border-hairline rounded-lg p-6 shadow-level-2";
+    node.innerHTML = `
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center text-primary">
+          <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
         </div>
-        <div class="mt-3 text-xs text-body select-text">${b.valueText}</div>
-      `;
-      container.appendChild(node);
-    });
-  }
-
-  function renderPersonalInsights(cards: any[], container: HTMLElement) {
-    container.innerHTML = "";
-    cards.forEach((c) => {
-      const node = document.createElement("div");
-      node.className =
-        "bg-canvas-soft border border-hairline rounded-lg p-4 shadow-level-1";
-      node.innerHTML = `
-        <div class="flex items-center justify-between gap-3">
-          <div class="font-mono text-[10px] text-mute uppercase tracking-widest">Personal Insight</div>
-          <div class="font-mono text-[10px] text-link font-semibold">Local</div>
+        <h3 class="text-sm font-semibold text-ink uppercase tracking-wider font-mono">Born In</h3>
+        <span class="font-mono text-[10px] text-mute uppercase tracking-widest ml-auto">${snapshot.birthYear}</span>
+      </div>
+      <div class="flex items-baseline gap-3 mb-4">
+        <span class="text-3xl font-bold tracking-tight text-ink">${snapshot.birthYear}</span>
+        <span class="font-mono text-xs text-link font-semibold uppercase tracking-wider">${snapshot.generation}</span>
+      </div>
+      ${snapshot.notableEvents.length > 0 ? `
+        <div class="space-y-2 pt-3 border-t border-hairline">
+          <span class="font-mono text-[10px] text-mute uppercase tracking-widest font-semibold">Notable Events</span>
+          ${snapshot.notableEvents.map((e: string) => `
+            <div class="flex items-start gap-2 text-xs text-body">
+              <span class="text-link mt-0.5 shrink-0">—</span>
+              <span>${e}</span>
+            </div>
+          `).join("")}
         </div>
-        <h5 class="text-sm font-semibold text-ink mt-2">${c.title}</h5>
-        <div class="mt-2 text-2xl font-bold tracking-tight text-ink tabular-nums">${c.valueText}</div>
-        <p class="text-xs text-body leading-relaxed mt-1 select-text">${c.description}</p>
-      `;
-      container.appendChild(node);
-    });
+      ` : ""}
+    `;
+    container.appendChild(node);
   }
 
   // 7. Render Timeline milestones
@@ -2105,7 +1600,7 @@ import {
       });
 
       const itemNode = document.createElement("div");
-      itemNode.className = "relative animate-fade-in";
+      itemNode.className = "relative animate-fade-in milestone-card";
       itemNode.style.animationDelay = `${idx * 0.05}s`;
 
       // Find the milestone indicator node layout
@@ -2270,14 +1765,15 @@ import {
     }
   });
 
-  // 9. Download Share Card (HTML5 Canvas PNG Renderer)
+  // 9. Download Share Card (HTML5 Canvas PNG Renderer - Premium)
   downloadCardBtn.addEventListener("click", () => {
     if (!activeBirthDate) return;
     const now = new Date();
     const age = calculateExactAge(activeBirthDate, now);
     const units = calculateTotalUnits(activeBirthDate, now);
     const zodiac = getZodiacSign(activeBirthDate);
-    const chineseZ = getChineseZodiac(activeBirthDate.getFullYear());
+    const life = calculateLifeProgress(activeBirthDate, now, parseInt(lifeExpectancyYearsInput.value || "85", 10) || 85);
+    const generation = getGenerationLabel(activeBirthDate.getFullYear());
 
     const canvas = document.getElementById(
       "share-card-canvas",
@@ -2285,102 +1781,105 @@ import {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Draw background (Vercel stark canvas style with soft gradient meshes)
-    ctx.fillStyle = "#ffffff";
+    // Premium glass-effect background
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const bgColor = isDark ? "#0b0b0f" : "#ffffff";
+    const textColor = isDark ? "#ffffff" : "#171717";
+    const bodyColor = isDark ? "rgba(255,255,255,0.78)" : "#4d4d4d";
+    const muteColor = isDark ? "rgba(255,255,255,0.52)" : "#888888";
+    const linkColor = isDark ? "#79a9ff" : "#0070f3";
+    const hairlineColor = isDark ? "rgba(255,255,255,0.16)" : "#ebebeb";
+
+    ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, 1200, 630);
 
-    // Draw gradient accent circles
-    // Blue spot top center
-    let grad1 = ctx.createRadialGradient(600, 0, 0, 600, 0, 500);
-    grad1.addColorStop(0, "rgba(0, 112, 243, 0.1)");
-    grad1.addColorStop(1, "rgba(255, 255, 255, 0)");
-    ctx.fillStyle = grad1;
-    ctx.fillRect(0, 0, 1200, 630);
+    // Gradient mesh spots
+    const spots = [
+      { x: 600, y: 0, r: 600, c: "rgba(0, 112, 243, 0.08)" },
+      { x: 0, y: 0, r: 500, c: "rgba(80, 227, 194, 0.1)" },
+      { x: 1200, y: 0, r: 500, c: "rgba(255, 0, 128, 0.06)" },
+      { x: 600, y: 630, r: 400, c: "rgba(245, 166, 35, 0.04)" },
+    ];
+    for (const s of spots) {
+      const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
+      g.addColorStop(0, s.c);
+      g.addColorStop(1, "rgba(255, 255, 255, 0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 1200, 630);
+    }
 
-    // Mint/Cyan spot top left
-    let grad2 = ctx.createRadialGradient(0, 0, 0, 0, 0, 500);
-    grad2.addColorStop(0, "rgba(80, 227, 194, 0.12)");
-    grad2.addColorStop(1, "rgba(255, 255, 255, 0)");
-    ctx.fillStyle = grad2;
-    ctx.fillRect(0, 0, 1200, 630);
-
-    // Pink spot top right
-    let grad3 = ctx.createRadialGradient(1200, 0, 0, 1200, 0, 500);
-    grad3.addColorStop(0, "rgba(255, 0, 128, 0.08)");
-    grad3.addColorStop(1, "rgba(255, 255, 255, 0)");
-    ctx.fillStyle = grad3;
-    ctx.fillRect(0, 0, 1200, 630);
-
-    // Draw card inner border
+    // Card frame
+    ctx.strokeStyle = hairlineColor;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "#ebebeb";
-    ctx.strokeRect(50, 50, 1100, 530);
-
-    // Draw headers
-    ctx.fillStyle = "#888888";
-    ctx.font = "bold 20px monospace";
-    ctx.fillText("AGE REPORT", 100, 110);
-
-    // Draw date born
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    const dateStr = activeBirthDate.toLocaleDateString("en-US", dateOptions);
-    ctx.fillStyle = "#4d4d4d";
-    ctx.font = "24px sans-serif";
-    ctx.fillText(`Born: ${dateStr}`, 100, 155);
-
-    // Brand watermark
-    ctx.fillStyle = "#171717";
-    ctx.font = "bold 24px sans-serif";
-    ctx.fillText("AGE CALCULATOR.", 900, 110);
-
-    // Large main counter representation
-    ctx.fillStyle = "#171717";
-    ctx.font = "bold 84px sans-serif";
-    ctx.fillText(`${age.years} Years old.`, 100, 310);
-
-    ctx.fillStyle = "#4d4d4d";
-    ctx.font = "normal 36px sans-serif";
-    ctx.fillText(
-      `${age.months} months, ${age.days} days, ${age.hours} hours`,
-      100,
-      380,
-    );
-
-    // Total metrics lived
-    ctx.fillStyle = "#0070f3";
-    ctx.font = "bold 28px monospace";
-    ctx.fillText(
-      `${units.days.toLocaleString()} Days Lived on Earth`,
-      100,
-      450,
-    );
-
-    // Divider line
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(235, 235, 235, 0.6)";
+    const m = 40;
+    const w = 1120;
+    const h = 550;
     ctx.beginPath();
-    ctx.moveTo(100, 500);
-    ctx.lineTo(1100, 500);
+    ctx.roundRect(m, m, w, h, 16);
     ctx.stroke();
 
-    // Footer profiles
-    ctx.fillStyle = "#888888";
-    ctx.font = "20px sans-serif";
-    ctx.fillText(
-      `Astrology: ${zodiac.name} ${zodiac.symbol}  |  Lunar Zodiac: ${chineseZ.element} ${chineseZ.name} ${chineseZ.symbol}`,
-      100,
-      545,
-    );
+    // Optional glass overlay
+    ctx.fillStyle = isDark ? "rgba(11, 11, 15, 0.4)" : "rgba(255, 255, 255, 0.3)";
+    ctx.beginPath();
+    ctx.roundRect(m, m, w, h, 16);
+    ctx.fill();
 
-    ctx.fillStyle = "#888888";
-    ctx.font = "16px monospace";
-    ctx.fillText("Calculations 100% private & secure.", 810, 545);
+    // Header
+    ctx.fillStyle = muteColor;
+    ctx.font = "bold 18px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText("AGE REPORT", 100, 100);
 
-    // Trigger download of canvas image
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 20px sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText("AGE CALCULATOR.", 1100, 100);
+
+    // Generation badge
+    ctx.fillStyle = linkColor;
+    ctx.font = "bold 14px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText(generation, 100, 130);
+
+    // Hero Age Display
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 110px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`${age.years}`, 600, 300);
+    ctx.font = "bold 28px sans-serif";
+    ctx.fillText("YEARS OLD", 600, 340);
+
+    // Days lived
+    ctx.fillStyle = linkColor;
+    ctx.font = "bold 22px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText(`${units.days.toLocaleString()} Days Lived`, 100, 410);
+
+    // Bottom stats row
+    const bdayStr = nextBDay.daysRemaining > 0 ? `${nextBDay.daysRemaining}d` : "Today!";
+    const lifeStr = `${life.completionPercent}%`;
+    const zodiacStr = zodiac.symbol;
+
+    ctx.fillStyle = muteColor;
+    ctx.font = "12px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText("NEXT BIRTHDAY", 100, 470);
+    ctx.fillText("LIFE PROGRESS", 460, 470);
+    ctx.fillText("ZODIAC", 820, 470);
+
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 28px sans-serif";
+    ctx.fillText(bdayStr, 100, 510);
+    ctx.fillText(lifeStr, 460, 510);
+    ctx.fillText(zodiacStr, 820, 510);
+
+    // Privacy footer
+    ctx.fillStyle = muteColor;
+    ctx.font = "14px monospace";
+    ctx.textAlign = "right";
+    ctx.fillText("100% private · local browser", 1100, 560);
+
+    // Trigger download
     const link = document.createElement("a");
     const birthISO = activeBirthDate.toISOString().slice(0, 10);
     link.download = `age-calculator-${birthISO}-${age.years}y.png`;
