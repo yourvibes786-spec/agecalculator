@@ -92,6 +92,17 @@ img, svg, canvas, video {
   height: auto;
 }
 
+/* Ensure all content respects viewport width on small screens */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Word break safety for long unbroken strings */
+.long-content, .tabular-nums {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
 /* Custom visual styles */
 .mesh-gradient-bg {
   position: absolute;

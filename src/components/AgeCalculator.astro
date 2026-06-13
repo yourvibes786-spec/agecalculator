@@ -10,40 +10,42 @@
 
   <!-- Header Nav -->
   <header
-    class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 h-16 transition-all"
+    class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all"
   >
     <div
-      class="max-w-[1200px] h-full mx-auto px-4 md:px-6 flex items-center justify-between"
+      class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex flex-wrap items-center justify-between gap-x-2 gap-y-1"
     >
       <!-- Title -->
-      <a href="/" class="flex items-center gap-2 focus-ring rounded-sm py-1">
-        <span class="font-mono text-xs font-semibold tracking-widest text-mute"
+      <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+        <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute"
           >0.0.1</span
         >
         <span
-          class="font-sans font-semibold text-lg tracking-tight select-none text-ink"
+          class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight"
           >AGE CALCULATOR.</span
         >
       </a>
 
-      <!-- Reset / New Calculation -->
-      <button
-        id="reset-btn"
-        class="hidden px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
-        type="button"
-      >
-        Reset Form
-      </button>
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Reset / New Calculation -->
+        <button
+          id="reset-btn"
+          class="hidden px-2 md:px-3 py-1 md:py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+          type="button"
+        >
+          Reset
+        </button>
 
-      <!-- Dark Mode Toggle -->
-      <button
-        type="button"
-        id="theme-toggle"
-        aria-label="Toggle dark mode"
-        class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
-      >
-        Dark Mode
-      </button>
+        <!-- Dark Mode Toggle -->
+        <button
+          type="button"
+          id="theme-toggle"
+          aria-label="Toggle dark mode"
+          class="px-2 md:px-3 py-1 md:py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+        >
+          <span class="hidden sm:inline">Dark Mode</span><span class="sm:hidden">🌙</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -76,7 +78,7 @@
           Precise to the second
         </span>
         <h1
-          class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-display-xl text-ink leading-tight mb-4 select-text"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-display-xl text-ink leading-tight mb-4 select-text"
         >
           Discover your time on Earth.
         </h1>
@@ -174,7 +176,7 @@
               ></path>
             </svg>
             <span
-              class="font-mono text-[10px] text-mute uppercase tracking-widest leading-none"
+              class="font-mono text-[9px] md:text-[10px] text-mute uppercase tracking-wider md:tracking-widest leading-none"
             >
               Privacy First: Calculations run 100% locally
             </span>
@@ -186,10 +188,10 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
         <!-- Feature 1 -->
         <div
-          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+          class="min-w-0 bg-canvas border border-hairline rounded-md p-5 md:p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
         >
           <div
-            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary shrink-0"
           >
             <svg
               class="w-5 h-5"
@@ -204,20 +206,19 @@
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">
+          <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
             Real-time Ticking
           </h3>
-          <p class="text-sm text-body leading-relaxed">
-            Watch your exact age increment in real time down to the second. Life
-            moves quickly—watch every second count.
+          <p class="text-xs md:text-sm text-body leading-relaxed">
+            Watch your exact age increment in real time down to the second.
           </p>
         </div>
         <!-- Feature 2 -->
         <div
-          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+          class="min-w-0 bg-canvas border border-hairline rounded-md p-5 md:p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
         >
           <div
-            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary shrink-0"
           >
             <svg
               class="w-5 h-5"
@@ -233,20 +234,19 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">
+          <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
             Cosmic Perspective
           </h3>
-          <p class="text-sm text-body leading-relaxed">
-            Learn how many miles you have traveled through space, average
-            breaths taken, and moon orbits made during your lifespan.
+          <p class="text-xs md:text-sm text-body leading-relaxed">
+            See how far you've traveled through space, breaths taken, and moon orbits made.
           </p>
         </div>
         <!-- Feature 3 -->
         <div
-          class="bg-canvas border border-hairline rounded-md p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+          class="min-w-0 bg-canvas border border-hairline rounded-md p-5 md:p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
         >
           <div
-            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary"
+            class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary shrink-0"
           >
             <svg
               class="w-5 h-5"
@@ -262,12 +262,11 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">
+          <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
             Milestone Tracker
           </h3>
-          <p class="text-sm text-body leading-relaxed">
-            See the exact calendar dates you turn 1,000, 10,000, or 25,000 days
-            lived, and get countdowns to upcoming ones.
+          <p class="text-xs md:text-sm text-body leading-relaxed">
+            See the exact dates you turn 18, 25, 30, 40, and beyond — plus countdowns to upcoming milestones.
           </p>
         </div>
       </div>
@@ -385,18 +384,18 @@
 
       <!-- Tab Buttons Navigation -->
       <div
-        class="w-full flex items-center justify-center border-b border-hairline overflow-x-auto no-scrollbar py-1"
+        class="w-full flex items-center justify-center border-b border-hairline py-1"
         role="tablist"
         aria-label="Dashboard sections"
       >
         <div
-          class="inline-flex space-x-1 bg-canvas-soft-2 p-1 rounded-pill-sm border border-hairline flex-nowrap"
+          class="inline-flex gap-0.5 bg-canvas-soft-2 p-0.5 rounded-pill-sm border border-hairline flex-nowrap"
         >
           <button
             type="button"
             role="tab"
             aria-selected="true"
-            class="tab-btn active px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-on-primary bg-primary"
+            class="tab-btn active px-2.5 md:px-4 py-1.5 text-[11px] md:text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-on-primary bg-primary whitespace-nowrap"
             data-tab="overview"
             id="tab-btn-overview"
           >
@@ -406,7 +405,7 @@
             type="button"
             role="tab"
             aria-selected="false"
-            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            class="tab-btn px-2.5 md:px-4 py-1.5 text-[11px] md:text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas whitespace-nowrap"
             data-tab="units"
             id="tab-btn-units"
           >
@@ -416,7 +415,7 @@
             type="button"
             role="tab"
             aria-selected="false"
-            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            class="tab-btn px-2.5 md:px-4 py-1.5 text-[11px] md:text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas whitespace-nowrap"
             data-tab="milestones"
             id="tab-btn-milestones"
           >
@@ -426,7 +425,7 @@
             type="button"
             role="tab"
             aria-selected="false"
-            class="tab-btn px-4 py-1.5 text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas"
+            class="tab-btn px-2.5 md:px-4 py-1.5 text-[11px] md:text-sm font-medium rounded-pill-sm transition cursor-pointer select-none text-body hover:text-ink hover:bg-canvas whitespace-nowrap"
             data-tab="stats"
             id="tab-btn-stats"
           >
@@ -630,14 +629,14 @@
                   </div>
 
                   <!-- Hero Age Display -->
-                  <div class="flex-1 flex flex-col justify-center items-center text-center py-4">
-                    <span id="share-card-age" class="text-5xl md:text-7xl font-bold tracking-tight text-ink tabular-nums block leading-none">0</span>
+                  <div class="flex-1 flex flex-col justify-center items-center text-center py-4 min-w-0">
+                    <span id="share-card-age" class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-ink tabular-nums block leading-none truncate max-w-full">0</span>
                     <span class="font-mono text-xs text-body font-semibold uppercase tracking-wider mt-1 block">Years Old</span>
                     <span id="share-card-days" class="font-mono text-sm text-link font-semibold uppercase tracking-wider mt-2 block">0 Days Lived</span>
                   </div>
 
                   <!-- Footer stats -->
-                  <div class="grid grid-cols-3 gap-4 border-t border-hairline/50 pt-4">
+                  <div class="grid grid-cols-3 gap-2 md:gap-4 border-t border-hairline/50 pt-4">
                     <div class="text-center">
                       <span class="font-mono text-[8px] text-mute uppercase tracking-widest block">Next Birthday</span>
                       <span id="share-card-countdown" class="text-xs font-bold text-primary tabular-nums block mt-0.5">—</span>
@@ -656,21 +655,21 @@
             </div>
 
             <!-- Action buttons -->
-            <div class="flex flex-wrap gap-3">
-              <button type="button" id="copy-summary-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <button type="button" id="copy-summary-btn" class="w-full sm:flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                 </svg>
-                <span id="copy-btn-text">Copy Summary</span>
+                <span id="copy-btn-text" class="truncate">Copy Summary</span>
               </button>
-              <button type="button" id="download-card-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-xs focus-ring transition shadow-level-1 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <button type="button" id="download-card-btn" class="w-full sm:flex-1 h-10 inline-flex items-center justify-center gap-2 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-xs focus-ring transition shadow-level-1 cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Download PNG
               </button>
-              <button type="button" id="share-web-btn" class="flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <button type="button" id="share-web-btn" class="w-full sm:flex-1 h-10 inline-flex items-center justify-center gap-2 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-xs focus-ring transition cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-8l-4-4-4 4m4-4v12" />
                 </svg>
                 Share
@@ -696,7 +695,7 @@
             >
             <span
               id="unit-months"
-              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -713,7 +712,7 @@
             >
             <span
               id="unit-weeks"
-              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -730,7 +729,7 @@
             >
             <span
               id="unit-days"
-              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -747,7 +746,7 @@
             >
             <span
               id="unit-hours"
-              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -764,7 +763,7 @@
             >
             <span
               id="unit-minutes"
-              class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -781,7 +780,7 @@
             >
             <span
               id="unit-seconds"
-              class="text-3xl font-bold tracking-tight text-link tabular-nums"
+              class="text-2xl md:text-3xl font-bold tracking-tight text-link tabular-nums truncate max-w-full block"
               >0</span
             >
             <span class="text-xs text-body block mt-2 leading-relaxed"
@@ -861,14 +860,14 @@
                 ></path>
               </svg>
             </div>
-            <div>
+            <div class="min-w-0">
               <span
                 class="font-mono text-xs font-semibold text-mute tracking-wider uppercase block mb-1"
                 >Solar Journey Distance</span
               >
               <span
                 id="stat-solar-travel"
-                class="text-3xl font-bold tracking-tight text-ink tabular-nums"
+                class="text-xl md:text-3xl font-bold tracking-tight text-ink tabular-nums truncate max-w-full block"
                 >0</span
               >
               <span class="text-sm font-sans font-medium text-body ml-1"
@@ -977,20 +976,20 @@
               >
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
-                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Leap Years</span>
-                <span id="stat-leap-years-witnessed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+            <div class="grid grid-cols-3 gap-2 md:gap-4">
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-3 md:p-4 text-center">
+                <span class="font-mono text-[9px] md:text-[10px] text-mute uppercase tracking-widest block mb-1">Leap Years</span>
+                <span id="stat-leap-years-witnessed" class="text-xl md:text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
 
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
-                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Moon Cycles</span>
-                <span id="stat-moon-cycles-completed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-3 md:p-4 text-center">
+                <span class="font-mono text-[9px] md:text-[10px] text-mute uppercase tracking-widest block mb-1">Moon Cycles</span>
+                <span id="stat-moon-cycles-completed" class="text-xl md:text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
 
-              <div class="bg-canvas-soft border border-hairline rounded-lg p-4 text-center">
-                <span class="font-mono text-[10px] text-mute uppercase tracking-widest block mb-1">Earth Orbits</span>
-                <span id="stat-earth-orbits-completed" class="text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
+              <div class="bg-canvas-soft border border-hairline rounded-lg p-3 md:p-4 text-center">
+                <span class="font-mono text-[9px] md:text-[10px] text-mute uppercase tracking-widest block mb-1">Earth Orbits</span>
+                <span id="stat-earth-orbits-completed" class="text-xl md:text-2xl font-bold tracking-tight text-ink tabular-nums">0</span>
               </div>
             </div>
           </div>
