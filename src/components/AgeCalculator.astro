@@ -11,6 +11,7 @@
   <!-- Header Nav -->
   <header
     class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all"
+    role="banner"
   >
     <div
       class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex flex-wrap items-center justify-between gap-x-2 gap-y-1"
@@ -19,6 +20,7 @@
       <a
         href="/"
         class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0"
+        aria-label="Age Calculator — Free Online Age Calculator by Date of Birth"
       >
         <span
           class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute"
@@ -58,6 +60,8 @@
   <!-- Main Content Area -->
   <main
     class="relative z-10 flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-6 py-12 flex flex-col justify-center"
+    role="main"
+    aria-label="Age Calculator Tool"
   >
     <!-- 1. LANDING / FORM VIEW -->
     <div
@@ -167,10 +171,11 @@
       </div>
 
       <!-- Feature Grid (3-Up) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left" role="list" aria-label="Age Calculator Features">
         <!-- Feature 1 -->
         <div
           class="min-w-0 bg-canvas border border-hairline rounded-md p-5 md:p-6 shadow-level-2 transition-transform hover:-translate-y-0.5"
+          role="listitem"
         >
           <div
             class="w-10 h-10 rounded-sm bg-canvas-soft border border-hairline flex items-center justify-center mb-4 text-primary shrink-0"
@@ -189,10 +194,10 @@
             </svg>
           </div>
           <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
-            Real-time Ticking
+            Real-time Age Counter
           </h3>
           <p class="text-xs md:text-sm text-body leading-relaxed">
-            Watch your exact age increment in real time down to the second.
+            Watch your exact age increment in real time down to the second — the ultimate chronological age calculator experience.
           </p>
         </div>
         <!-- Feature 2 -->
@@ -217,11 +222,11 @@
             </svg>
           </div>
           <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
-            Cosmic Perspective
+            Cosmic Age Perspective
           </h3>
           <p class="text-xs md:text-sm text-body leading-relaxed">
             See how far you've traveled through space, breaths taken, and moon
-            orbits made.
+            orbits made — fascinating stats from your age calculator results.
           </p>
         </div>
         <!-- Feature 3 -->
@@ -246,11 +251,11 @@
             </svg>
           </div>
           <h3 class="text-sm md:text-base font-semibold text-ink mb-2">
-            Milestone Tracker
+            Life Milestone Tracker
           </h3>
           <p class="text-xs md:text-sm text-body leading-relaxed">
             See the exact dates you turn 18, 25, 30, 40, and beyond — plus
-            countdowns to upcoming milestones.
+            countdowns to upcoming milestones in your age journey.
           </p>
         </div>
       </div>

@@ -1,36 +1,48 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro'; // Import the reusable Footer component
+import Footer from '../components/Footer.astro';
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Layout title="About Us — Age Calculator" description="Learn about the Age Calculator project, its mission, and its commitment to privacy.">
+<Layout
+  title="About Us — Age Calculator | Our Mission & Privacy Promise"
+  description="Learn about the Age Calculator project, our mission to provide accurate age calculations, and our strict privacy-first approach. No data collection, 100% local processing."
+  canonical="https://agecalculator.com/about"
+  ogType="website"
+>
   <div class="min-h-screen flex flex-col">
-    <!-- Simple Nav Header -->
-    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all" role="banner">
       <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0" aria-label="Age Calculator — Home">
           <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">0.0.1</span>
           <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
         </a>
         <a href="/"
           class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+          aria-label="Back to Age Calculator"
         >← Back to Home</a>
       </div>
     </header>
 
-    <!-- Content -->
-    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20">
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20" role="main">
       <article class="prose prose-sm md:prose-base max-w-none">
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex items-center gap-1.5 text-xs text-mute font-mono">
+            <li><a href="/" class="hover:text-ink focus-ring rounded-sm">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" class="text-ink font-semibold">About</li>
+          </ol>
+        </nav>
+
         <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">About Age Calculator</h1>
         <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Last updated: {formattedDate}</p>
 
         <div class="space-y-6 text-body text-sm md:text-base leading-relaxed">
-          
+
           <section>
             <h2 class="text-lg font-semibold text-ink mb-3">Our Mission</h2>
-            <p>At Age Calculator, our mission is to provide a simple, accurate, and exceptionally private tool for understanding time. We believe that personal calculations should remain personal, which is why every feature is designed with a strict 'privacy-first' philosophy. We aim to empower users with clear, reliable information without compromising their data.</p>
+            <p>At Age Calculator, our mission is to provide a simple, accurate, and exceptionally private tool for understanding time. We believe that personal calculations should remain personal, which is why every feature is designed with a strict "privacy-first" philosophy. We aim to empower users with clear, reliable information without compromising their data.</p>
           </section>
 
           <section class="bg-canvas border border-hairline rounded-lg p-5 md:p-6">
@@ -63,12 +75,12 @@ const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month
 
           <section>
             <h2 class="text-lg font-semibold text-ink mb-3">Technology & Design</h2>
-            <p>Built with Astro for performance and efficiency, and styled with Tailwind CSS to ensure a clean, modern, and responsive user experience. The design prioritizes clarity, speed, and a premium feel.</p>
+            <p>Built with <a href="https://astro.build" class="text-link hover:underline" target="_blank" rel="noopener noreferrer">Astro</a> for performance and efficiency, and styled with <a href="https://tailwindcss.com" class="text-link hover:underline" target="_blank" rel="noopener noreferrer">Tailwind CSS</a> to ensure a clean, modern, and responsive user experience. The design prioritizes clarity, speed, and a premium feel.</p>
           </section>
 
           <section>
             <h2 class="text-lg font-semibold text-ink mb-3">Our Commitment</h2>
-            <p>We are dedicated to providing a reliable and trustworthy tool. By focusing on local processing and user privacy, we offer a unique experience in the world of online calculators.</p>
+            <p>We are dedicated to providing a reliable and trustworthy tool. By focusing on local processing and user privacy, we offer a unique experience in the world of online calculators. Whether you need to calculate your age in years, find your exact age in days, or discover your zodiac sign, our tool delivers accurate results without compromising your privacy.</p>
           </section>
 
           <div class="pt-6 border-t border-hairline">
@@ -80,6 +92,6 @@ const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month
       </article>
     </main>
 
-    <Footer /> {/* Replaced old footer HTML with the reusable component */}
+    <Footer />
   </div>
 </Layout>

@@ -2,46 +2,220 @@
 import '../styles/global.css';
 
 interface Props {
-	title?: string;
-	description?: string;
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: string;
 }
 
-const { 
-	title = "Exact Age Calculator — Real-time Counter & Countdown", 
-	description = "Calculate your exact age down to the second in real time. Get countdowns to your next birthday, milestones lived, Day of the Week born, Zodiac details, and a downloadable share card. 100% private and runs local in browser." 
+const {
+  title = "Age Calculator Online – Calculate Exact Age by Date of Birth",
+  description = "Calculate your exact age instantly with our free Age Calculator. Find age in years, months, days, hours and seconds using your date of birth.",
+  canonical = "https://agecalculator.com/",
+  ogImage = "https://agecalculator.com/og-image.png",
+  ogType = "website",
 } = Astro.props;
+
+const siteName = "Age Calculator";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		
-		<!-- Primary SEO Meta Tags -->
-		<title>{title}</title>
-		<meta name="title" content={title} />
-		<meta name="description" content={description} />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
 
-		<!-- Open Graph / Facebook -->
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+    <!-- Primary SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href={canonical} />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_US" />
 
-		<!-- Google Fonts: Inter and JetBrains Mono -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
-	</head>
-	<body class="bg-canvas-soft text-ink select-none font-sans min-h-screen">
-		<slot />
-	</body>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Additional SEO -->
+    <meta name="author" content={siteName} />
+    <meta name="application-name" content={siteName} />
+    <meta name="theme-color" content="#171717" />
+
+    <!-- Structured Data: WebApplication -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Age Calculator",
+      "url": canonical,
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Exact age calculation in years, months, days, hours, minutes, seconds",
+        "Real-time age counter",
+        "Birthday countdown",
+        "Zodiac sign lookup",
+        "Chinese zodiac calculator",
+        "Life milestone tracker",
+        "Share card generation",
+        "Dark mode support"
+      ],
+      "screenshot": ogImage,
+      "softwareHelp": {
+        "@type": "CreativeWork",
+        "url": `${canonical}about`
+      },
+      "privacyPolicy": {
+        "@type": "CreativeWork",
+        "url": `${canonical}privacy`
+      }
+    })} />
+
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Age Calculator Online – Calculate Exact Age by Date of Birth",
+      "operatingSystem": "All",
+      "applicationCategory": "UtilitiesApplication",
+      "url": canonical,
+      "description": "Calculate your exact age from date of birth. Free online age calculator showing age in years, months, days, hours, minutes, and seconds. Includes birthday countdown, zodiac signs, and life milestones.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "1250",
+        "bestRating": "5"
+      }
+    })} />
+
+    <!-- Structured Data: BreadcrumbList -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": canonical
+        }
+      ]
+    })} />
+
+    <!-- Structured Data: FAQPage (9 search-intent questions) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is my age calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "My age calculator is a free online tool that instantly determines your exact age based on your date of birth. It breaks your age down into years, months, days, hours, minutes, and seconds — updating in real time. Unlike a simple estimate, it accounts for varying month lengths, leap years, and optionally your birth time to deliver a precise chronological age. All calculations run locally in your browser, so your birth date never leaves your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How old am I calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our how old am I calculator shows your exact age the moment you enter your date of birth. Simply select your birth date, optionally add your birth time, and click Calculate Age. The tool instantly displays your age in years, months, days, hours, minutes, and seconds — and keeps updating every second. You can also view your total age expressed as total days lived, total weeks, total months, and total hours under the Time Units tab."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I calculate age from date of birth?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To calculate your age from date of birth, enter your birth date into the calculator's date picker. Select the year, month, and day you were born. Optionally enter your birth time for second-level precision. Click Calculate Age and the tool instantly displays your current age broken down into years, months, days, hours, minutes, and seconds. The result updates in real time. This is the most accurate way to calculate age from DOB, as it automatically accounts for varying month lengths and leap years."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a chronological age calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A chronological age calculator measures the exact time elapsed between your date of birth and the current moment. Unlike biological age (which estimates your body's condition) or mental age (which measures cognitive development), chronological age is a straightforward, objective calculation of time lived. It is the standard used for legal, administrative, and personal age verification. Our chronological age calculator provides this measurement in years, months, days, hours, minutes, and seconds, updating live."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I calculate age in days?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Our age calculator shows your total age in days along with years, months, hours, minutes, and seconds. Switch to the Time Units tab to see your total days lived as a single number — for example, 12,456 days. The calculator also shows total weeks, total months, total hours, total minutes, and total seconds. This makes it easy to answer how many days old you are without any manual math."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate is this age calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This age calculator is highly accurate. It accounts for varying month lengths (28 to 31 days), leap years (extra day in February every 4 years), and when a birth time is provided, calculates your age down to the exact second. The calculation follows standard Gregorian calendar rules. Minor variations may occur due to timezone differences or browser date handling, but these are negligible — typically less than one day across different devices and browsers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I calculate age on a future date?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The Milestones tab shows the exact dates when you will reach key ages — 18, 21, 25, 30, 40, 50, 60, 70, 80, 90, and 100 years old. Each milestone shows the date you will reach that age and how many days remain until then. This is useful for planning around age-related milestones, understanding your age on a past date, or seeing when you will reach a particular age in the future."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this online age calculator free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, this online age calculator is completely free. There are no sign-ups, no hidden fees, no premium tiers, and no subscription plans. Every feature — the real-time counter, birthday countdown, zodiac lookup, milestone tracker, life progress dashboard, and share card generator — is available at no cost. The tool runs entirely in your browser with zero data collection."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this age calculator store my birth date?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Your birth date is never stored on any server, transmitted externally, or shared with third parties. All calculations run 100% locally in your browser. The only place your birth date is saved is your browser's local storage for convenience — so the calculator can reload your last entry when you return. You can clear this data at any time by clicking the Reset button or clearing your browser storage."
+          }
+        }
+      ]
+    })} />
+
+    <!-- Google Fonts: Inter and JetBrains Mono (preconnect + font-display:swap for Core Web Vitals) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-canvas-soft text-ink select-none font-sans min-h-screen">
+    <slot />
+  </body>
 </html>

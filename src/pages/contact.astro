@@ -3,33 +3,43 @@ import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-const siteVersionHeader = "0.0.1"; // Consistent with privacy.astro and terms.astro header
-const siteVersionFooter = "v1.0.0"; // Consistent with privacy.astro and terms.astro footer
 ---
 
-<Layout title="Contact Us — Age Calculator" description="Get in touch with the Age Calculator team for feedback, support, or inquiries.">
+<Layout
+  title="Contact Us — Age Calculator | Get in Touch"
+  description="Get in touch with the Age Calculator team for feedback, support, bug reports, or business inquiries. We'd love to hear from you."
+  canonical="https://agecalculator.com/contact"
+  ogType="website"
+>
   <div class="min-h-screen flex flex-col">
-    <!-- Simple Nav Header -->
-    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all" role="banner">
       <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
-          <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">{siteVersionHeader}</span>
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0" aria-label="Age Calculator — Home">
+          <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">0.0.1</span>
           <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
         </a>
         <a href="/"
           class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+          aria-label="Back to Age Calculator"
         >← Back to Home</a>
       </div>
     </header>
 
-    <!-- Content -->
-    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20">
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20" role="main">
       <article class="prose prose-sm md:prose-base max-w-none">
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex items-center gap-1.5 text-xs text-mute font-mono">
+            <li><a href="/" class="hover:text-ink focus-ring rounded-sm">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" class="text-ink font-semibold">Contact</li>
+          </ol>
+        </nav>
+
         <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">Contact Us</h1>
         <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Last updated: {formattedDate}</p>
 
         <div class="space-y-6 text-body text-sm md:text-base leading-relaxed">
-          
+
           <section>
             <h2 class="text-lg font-semibold text-ink mb-3">Why Contact Us?</h2>
             <p>Your feedback, reports, and suggestions are invaluable in making Age Calculator better. We are always looking for ways to improve accuracy, privacy, and user experience. Please reach out if you have any of the following:</p>
@@ -38,28 +48,28 @@ const siteVersionFooter = "v1.0.0"; // Consistent with privacy.astro and terms.a
                 <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
                 <div>
                   <strong class="text-ink font-semibold block">Feedback & Suggestions:</strong>
-                  <span class="text-body text-sm">Share your thoughts on existing features or ideas for new ones.</span>
+                  <span class="text-body text-sm">Share your thoughts on existing features or ideas for new ones — like additional zodiac calculations or new milestone tracking options.</span>
                 </div>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
                 <div>
                   <strong class="text-ink font-semibold block">Bug Reports:</strong>
-                  <span class="text-body text-sm">Help us identify and fix any issues you encounter.</span>
+                  <span class="text-body text-sm">Help us identify and fix any issues you encounter with the age calculator, birthday countdown, or other features.</span>
                 </div>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
                 <div>
                   <strong class="text-ink font-semibold block">Business Inquiries:</strong>
-                  <span class="text-body text-sm">For partnerships or other professional matters.</span>
+                  <span class="text-body text-sm">For partnerships or other professional matters related to the age calculator tool.</span>
                 </div>
               </li>
               <li class="flex items-start gap-3">
                 <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
                 <div>
                   <strong class="text-ink font-semibold block">General Questions:</strong>
-                  <span class="text-body text-sm">Any other queries you may have.</span>
+                  <span class="text-body text-sm">Any other queries you may have about calculating age, zodiac signs, or the tool's features.</span>
                 </div>
               </li>
             </ul>

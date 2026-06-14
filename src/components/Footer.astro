@@ -1,21 +1,26 @@
 ---
 const version = 'v1.0.0';
+const currentYear = new Date().getFullYear();
 ---
-<footer class="w-full bg-canvas/40 border-t border-hairline py-8">
+
+<footer class="w-full bg-canvas/40 border-t border-hairline py-8" role="contentinfo">
   <div class="max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
     <div class="flex items-center gap-1.5 font-mono text-[10px] text-mute font-semibold uppercase tracking-wider">
       <span>Age Calculator</span>
-      <span>•</span>
+      <span aria-hidden="true">•</span>
       <span>{version}</span>
-      <span>•</span>
+      <span aria-hidden="true">•</span>
       <span>Privacy-First</span>
     </div>
-    <div class="text-[11px] text-mute flex gap-4 font-medium">
-      <a href="/" class="hover:text-ink focus-ring rounded-sm">Home</a>
-      <a href="/about" class="hover:text-ink focus-ring rounded-sm">About Us</a>
-      <a href="/contact" class="hover:text-ink focus-ring rounded-sm">Contact</a>
-      <a href="/privacy" class="hover:text-ink focus-ring rounded-sm">Privacy policy</a>
-      <a href="/terms" class="hover:text-ink focus-ring rounded-sm">Terms of service</a>
+    <nav aria-label="Footer navigation" class="text-[11px] text-mute flex gap-4 font-medium">
+      <a href="/" class="hover:text-ink focus-ring rounded-sm" aria-label="Home — Age Calculator">Home</a>
+      <a href="/about" class="hover:text-ink focus-ring rounded-sm" aria-label="About Age Calculator">About Us</a>
+      <a href="/contact" class="hover:text-ink focus-ring rounded-sm" aria-label="Contact Age Calculator">Contact</a>
+      <a href="/privacy" class="hover:text-ink focus-ring rounded-sm" aria-label="Privacy Policy">Privacy Policy</a>
+      <a href="/terms" class="hover:text-ink focus-ring rounded-sm" aria-label="Terms of Service">Terms of Service</a>
+    </nav>
+    <div class="font-mono text-[10px] text-mute">
+      &copy; {currentYear} Age Calculator
     </div>
   </div>
 </footer>

@@ -3,24 +3,36 @@ import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Terms of Service — Age Calculator" description="Terms of service for the Age Calculator. Informational tool only. No warranty. Results may vary slightly based on browser date handling.">
+<Layout
+  title="Terms of Service — Age Calculator | Usage Guidelines"
+  description="Terms of service for the Age Calculator. Informational tool only. No warranty. Results may vary slightly based on browser date handling."
+  canonical="https://agecalculator.com/terms"
+  ogType="website"
+>
   <div class="min-h-screen flex flex-col">
-    <!-- Simple Nav Header -->
-    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all" role="banner">
       <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0" aria-label="Age Calculator — Home">
           <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">0.0.1</span>
           <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
         </a>
         <a href="/"
           class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+          aria-label="Back to Age Calculator"
         >← Back to Home</a>
       </div>
     </header>
 
-    <!-- Content -->
-    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20">
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20" role="main">
       <article class="prose prose-sm md:prose-base max-w-none">
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex items-center gap-1.5 text-xs text-mute font-mono">
+            <li><a href="/" class="hover:text-ink focus-ring rounded-sm">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" class="text-ink font-semibold">Terms of Service</li>
+          </ol>
+        </nav>
+
         <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">Terms of Service</h1>
         <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Last updated: June 2026</p>
 
@@ -42,7 +54,7 @@ import Footer from '../components/Footer.astro';
               <span class="text-mute shrink-0 mt-0.5 text-sm">02.</span>
               <div>
                 <strong class="text-ink font-semibold block">Results May Vary</strong>
-                <span class="text-body text-sm">Age calculations depend on your browser's date and time handling, including timezone offsets and leap year rules. Slight variations (< 1 day) may occur across different browsers or devices.</span>
+                <span class="text-body text-sm">Age calculations depend on your browser's date and time handling, including timezone offsets and leap year rules. Slight variations (&lt; 1 day) may occur across different browsers or devices.</span>
               </div>
             </div>
             <div class="flex items-start gap-3">
