@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+const today = new Date();
+const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const siteVersionHeader = "0.0.1"; // Consistent with privacy.astro and terms.astro header
+const siteVersionFooter = "v1.0.0"; // Consistent with privacy.astro and terms.astro footer
+---
+
+<Layout title="Server Error — Age Calculator" description="An unexpected error occurred. Please try again or return to the homepage.">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+      <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+          <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">{siteVersionHeader}</span>
+          <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
+        </a>
+        <div class="flex items-center gap-2 font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider text-mute">
+           Server Error
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20 text-center">
+      <article class="prose prose-sm md:prose-base max-w-none">
+        <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">Something Went Wrong</h1>
+        <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Error 500</p>
+
+        <div class="space-y-6 text-body text-sm md:text-base leading-relaxed">
+          <p>An unexpected server error occurred. We're working to fix this. Please try again later or return to the homepage.</p>
+          
+          <div class="pt-6 border-t border-hairline space-y-4">
+            <!-- Retry button - in a static site, this usually means reloading, or linking home -->
+            <button id="retryButton" 
+                    onclick="window.location.reload()"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-sans font-medium text-sm focus-ring transition shadow-level-2 mr-2"
+            >Retry</button>
+            <a href="/"
+              class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-sm focus-ring transition shadow-level-2"
+            >← Back to Home</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>

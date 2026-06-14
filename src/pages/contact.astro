@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+const today = new Date();
+const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const siteVersionHeader = "0.0.1"; // Consistent with privacy.astro and terms.astro header
+const siteVersionFooter = "v1.0.0"; // Consistent with privacy.astro and terms.astro footer
+---
+
+<Layout title="Contact Us — Age Calculator" description="Get in touch with the Age Calculator team for feedback, support, or inquiries.">
+  <div class="min-h-screen flex flex-col">
+    <!-- Simple Nav Header -->
+    <header class="sticky top-0 z-50 w-full bg-canvas/80 backdrop-blur-md border-b border-hairline shadow-level-1 min-h-14 md:min-h-16 transition-all">
+      <div class="max-w-[1200px] mx-auto px-3 md:px-6 py-2 md:py-0 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-1.5 focus-ring rounded-sm py-1 shrink-0">
+          <span class="font-mono text-[10px] md:text-xs font-semibold tracking-widest text-mute">{siteVersionHeader}</span>
+          <span class="font-sans font-semibold text-sm md:text-lg tracking-tight select-none text-ink leading-tight">AGE CALCULATOR.</span>
+        </a>
+        <a href="/"
+          class="px-3 py-1.5 bg-canvas hover:bg-canvas-soft-2 text-ink border border-hairline rounded-sm font-mono text-[10px] md:text-xs font-semibold uppercase tracking-wider focus-ring transition cursor-pointer"
+        >← Back to Home</a>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-20">
+      <article class="prose prose-sm md:prose-base max-w-none">
+        <h1 class="text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">Contact Us</h1>
+        <p class="text-xs md:text-sm text-mute font-mono uppercase tracking-widest mb-8">Last updated: {formattedDate}</p>
+
+        <div class="space-y-6 text-body text-sm md:text-base leading-relaxed">
+          
+          <section>
+            <h2 class="text-lg font-semibold text-ink mb-3">Why Contact Us?</h2>
+            <p>Your feedback, reports, and suggestions are invaluable in making Age Calculator better. We are always looking for ways to improve accuracy, privacy, and user experience. Please reach out if you have any of the following:</p>
+            <ul class="space-y-4 mt-4">
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">Feedback & Suggestions:</strong>
+                  <span class="text-body text-sm">Share your thoughts on existing features or ideas for new ones.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">Bug Reports:</strong>
+                  <span class="text-body text-sm">Help us identify and fix any issues you encounter.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">Business Inquiries:</strong>
+                  <span class="text-body text-sm">For partnerships or other professional matters.</span>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-link shrink-0 mt-0.5 text-sm">✓</span>
+                <div>
+                  <strong class="text-ink font-semibold block">General Questions:</strong>
+                  <span class="text-body text-sm">Any other queries you may have.</span>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <div class="pt-6 border-t border-hairline">
+            <a href="/"
+              class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-neutral-800 text-on-primary rounded-sm font-sans font-medium text-sm focus-ring transition shadow-level-2"
+            >← Back to Age Calculator</a>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>
