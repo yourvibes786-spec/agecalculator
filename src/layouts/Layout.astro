@@ -7,14 +7,16 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   ogType?: string;
+  robots?: string;
 }
 
 const {
   title = "Age Calculator Online – Calculate Exact Age by Date of Birth",
   description = "Calculate your exact age instantly with our free Age Calculator. Find age in years, months, days, hours and seconds using your date of birth.",
-  canonical = "https://agecalculator.com/",
-  ogImage = "https://agecalculator.com/og-image.png",
+  canonical = "https://agecalculatordob.pages.dev/",
+  ogImage = "https://agecalculatordob.pages.dev/og-image.png",
   ogType = "website",
+  robots = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
 } = Astro.props;
 
 const siteName = "Age Calculator";
@@ -33,7 +35,7 @@ const siteName = "Age Calculator";
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
 
     <!-- Open Graph / Facebook -->
@@ -86,11 +88,11 @@ const siteName = "Age Calculator";
       "screenshot": ogImage,
       "softwareHelp": {
         "@type": "CreativeWork",
-        "url": `${canonical}about`
+        "url": `${canonical}about/`
       },
       "privacyPolicy": {
         "@type": "CreativeWork",
-        "url": `${canonical}privacy`
+        "url": `${canonical}privacy/`
       }
     })} />
 
